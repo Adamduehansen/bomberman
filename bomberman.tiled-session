@@ -9,10 +9,10 @@
     "fileStates": {
         "public/maps/map1.tmx": {
             "scale": 2,
-            "selectedLayer": 1,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 173.75,
-                "y": 130.75
+                "x": 140.25,
+                "y": 42.25
             }
         },
         "public/maps/map1.tmx#Environment": {
@@ -20,6 +20,7 @@
         }
     },
     "last.imagePath": "/Users/adamhansen/development/bomber-man/public/sprites",
+    "last.objectTemplatePath": "/Users/adamhansen/development/bomber-man/public/tiled-templates",
     "map.height": 14,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 16,

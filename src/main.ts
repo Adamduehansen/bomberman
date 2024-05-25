@@ -6,6 +6,7 @@ import {
   ImageSource,
   Keys,
   Loader,
+  randomInRange,
   Shape,
   SpriteSheet,
 } from "excalibur";
@@ -29,40 +30,40 @@ const spriteSheet = SpriteSheet.fromImageSource({
 });
 
 const tiledMap = new TiledResource("maps/map1.tmx", {
-  entityClassNameFactories: {
-    "spawn-point": function (props) {
-      const player = new Actor({
-        x: props.worldPos.x,
-        y: props.worldPos.y,
-        color: Color.Red,
-        width: 16,
-        height: 16,
-        name: "Player",
-        collider: Shape.Box(16, 16),
-        collisionType: CollisionType.Active,
-      });
-      player.graphics.use(spriteSheet.getSprite(5, 0));
-      player.on("preupdate", () => {
-        if (game.input.keyboard.isHeld(Keys.S)) {
-          player.pos.y += 1;
-        }
-        if (game.input.keyboard.isHeld(Keys.W)) {
-          player.pos.y -= 1;
-        }
-        if (game.input.keyboard.isHeld(Keys.A)) {
-          player.pos.x -= 1;
-        }
-        if (game.input.keyboard.isHeld(Keys.D)) {
-          player.pos.x += 1;
-        }
-      });
+  // entityClassNameFactories: {
+  //   "spawn-point": function (props) {
+  //     const player = new Actor({
+  //       x: props.worldPos.x,
+  //       y: props.worldPos.y,
+  //       color: Color.Red,
+  //       width: 16,
+  //       height: 16,
+  //       name: "Player",
+  //       collider: Shape.Box(16, 16),
+  //       collisionType: CollisionType.Active,
+  //     });
+  //     player.graphics.use(spriteSheet.getSprite(5, 0));
+  //     player.on("preupdate", () => {
+  //       if (game.input.keyboard.isHeld(Keys.S)) {
+  //         player.pos.y += 1;
+  //       }
+  //       if (game.input.keyboard.isHeld(Keys.W)) {
+  //         player.pos.y -= 1;
+  //       }
+  //       if (game.input.keyboard.isHeld(Keys.A)) {
+  //         player.pos.x -= 1;
+  //       }
+  //       if (game.input.keyboard.isHeld(Keys.D)) {
+  //         player.pos.x += 1;
+  //       }
+  //     });
 
-      game.currentScene.camera.strategy.lockToActor(player);
-      game.currentScene.camera.zoom = 4;
+  //     game.currentScene.camera.strategy.lockToActor(player);
+  //     game.currentScene.camera.zoom = 4;
 
-      return player;
-    },
-  },
+  //     return player;
+  //   },
+  // },
 });
 
 const loader = new Loader([imageSource, tiledMap]);
@@ -76,4 +77,41 @@ game.on("initialize", () => {
   socket.addEventListener("open", () => {
     console.log("Connected to socket");
   });
+
+  const spawnPoints = tiledMap.getObjectsByClassName("spawn-point");
+  const spawnPointIndex = Math.floor(randomInRange(0, spawnPoints.length));
+
+  const spawnPoint = spawnPoints[spawnPointIndex];
+  const player = new Actor({
+    x: spawnPoint.x,
+    y: spawnPoint.y,
+    color: Color.Red,
+    width: 16,
+    height: 16,
+    name: "Player",
+    collider: Shape.Box(16, 16),
+    collisionType: CollisionType.Active,
+    z: 10,
+  });
+  player.on("initialize", () => {
+    player.graphics.use(spriteSheet.getSprite(5, 0));
+  });
+  player.on("preupdate", () => {
+    if (game.input.keyboard.isHeld(Keys.S)) {
+      player.pos.y += 1;
+    }
+    if (game.input.keyboard.isHeld(Keys.W)) {
+      player.pos.y -= 1;
+    }
+    if (game.input.keyboard.isHeld(Keys.A)) {
+      player.pos.x -= 1;
+    }
+    if (game.input.keyboard.isHeld(Keys.D)) {
+      player.pos.x += 1;
+    }
+  });
+  game.add(player);
+
+  game.currentScene.camera.strategy.lockToActor(player);
+  game.currentScene.camera.zoom = 4;
 });
