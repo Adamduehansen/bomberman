@@ -67,6 +67,13 @@ const tiledMap = new TiledResource("maps/map1.tmx", {
 
 const loader = new Loader([imageSource, tiledMap]);
 
-await game.start(loader).then(() => {
+game.start(loader).then(() => {
   tiledMap.addToScene(game.currentScene);
+});
+
+game.on("initialize", () => {
+  const socket = new WebSocket("ws://localhost:8081");
+  socket.addEventListener("open", () => {
+    console.log("Connected to socket");
+  });
 });
