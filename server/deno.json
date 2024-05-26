@@ -1,7 +1,0 @@
-{
-  "name": "@bomberman/server",
-  "version": "0.1.0",
-  "tasks": {
-    "dev": "deno run --allow-net --watch ./server.ts"
-  }
-}
