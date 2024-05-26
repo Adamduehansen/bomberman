@@ -1,4 +1,4 @@
-import { Engine, randomInRange } from "excalibur";
+import { DisplayMode, Engine, randomInRange } from "excalibur";
 import "./style.css";
 import { loader, tiledMap } from "./resources.ts";
 import Player from "./Player.ts";
@@ -6,6 +6,9 @@ import Player from "./Player.ts";
 const game = new Engine({
   suppressPlayButton: true,
   pixelArt: true,
+  width: 336,
+  height: 208,
+  displayMode: DisplayMode.FillScreen,
 });
 
 game.start(loader).then(() => {
@@ -13,11 +16,6 @@ game.start(loader).then(() => {
 });
 
 game.on("initialize", () => {
-  const socket = new WebSocket("ws://localhost:8081");
-  socket.addEventListener("open", () => {
-    console.log("Connected to socket");
-  });
-
   const spawnPoints = tiledMap.getObjectsByClassName("spawn-point");
   const spawnPointIndex = Math.floor(randomInRange(0, spawnPoints.length));
 
@@ -28,6 +26,7 @@ game.on("initialize", () => {
   });
   game.add(player);
 
-  game.currentScene.camera.strategy.lockToActor(player);
-  game.currentScene.camera.zoom = 4;
+  game.currentScene.camera.x = 336 / 2;
+  game.currentScene.camera.y = 208 / 2;
+  game.currentScene.camera.zoom = 3;
 });
