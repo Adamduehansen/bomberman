@@ -1,15 +1,13 @@
 {
   "tasks": {
-    "dev": "deno run -A --node-modules-dir npm:vite",
-    "build": "deno run -A --node-modules-dir npm:vite build",
-    "preview": "deno run -A --node-modules-dir npm:vite preview",
-    "serve": "deno run --allow-net --allow-read https://deno.land/std@0.157.0/http/file_server.ts dist/",
-    "server": "deno run --allow-net --watch server/server.ts",
-    "all": "deno task dev & deno task server"
+    "mono": "deno run -A jsr:@jurassicjs/monodeno"
   },
+  "workspaces": [
+    "client",
+    "server"
+  ],
   "imports": {
-    "excalibur": "npm:excalibur",
-    "@excaliburjs/plugin-tiled": "npm:@excaliburjs/plugin-tiled"
+    "@jurassicjs/monodeno": "jsr:@jurassicjs/monodeno@^0.0.12"
   },
   "compilerOptions": {
     "lib": [

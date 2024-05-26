@@ -3,8 +3,12 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "public/maps/map1.tmx",
+    "activeFile": "",
     "expandedProjectPaths": [
+        ".",
+        "public",
+        "public/tiled-templates",
+        "public/maps"
     ],
     "fileStates": {
         "public/maps/map1.tmx": {
@@ -27,7 +31,6 @@
     "map.tileWidth": 16,
     "map.width": 21,
     "openFiles": [
-        "public/maps/map1.tmx"
     ],
     "project": "bomberman.tiled-project",
     "property.type": "bool",

@@ -1,6 +1,9 @@
 Deno.serve({
   port: 8081,
   hostname: "0.0.0.0",
+  onListen: (() => {
+    console.log("Socket server started!");
+  }),
 }, (req) => {
   if (req.headers.get("upgrade") != "websocket") {
     return new Response(null, {
