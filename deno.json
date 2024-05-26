@@ -7,7 +7,9 @@
     "server"
   ],
   "imports": {
-    "@jurassicjs/monodeno": "jsr:@jurassicjs/monodeno@^0.0.12"
+    "@jurassicjs/monodeno": "jsr:@jurassicjs/monodeno@^0.0.12",
+    "@excaliburjs/plugin-tiled": "npm:@excaliburjs/plugin-tiled",
+    "excalibur": "npm:excalibur"
   },
   "compilerOptions": {
     "lib": [
