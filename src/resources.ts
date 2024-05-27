@@ -3,6 +3,9 @@ import { TiledResource } from "@excaliburjs/plugin-tiled";
 
 export const Resources = {
   spriteSheet: new ImageSource("sprites/spritesheet.png"),
+  spriteSheetTransparent: new ImageSource(
+    "sprites/spritesheet_transparent.png",
+  ),
 } as const;
 
 export const tiledMap = new TiledResource("maps/map1.tmx");
@@ -14,7 +17,7 @@ for (const resource of Object.values(Resources)) {
 }
 
 export const spriteSheet = SpriteSheet.fromImageSource({
-  image: Resources.spriteSheet,
+  image: Resources.spriteSheetTransparent,
   grid: {
     columns: 16,
     rows: 23,

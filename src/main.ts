@@ -1,4 +1,4 @@
-import { DisplayMode, Engine, randomInRange } from "excalibur";
+import { DisplayMode, Engine } from "excalibur";
 import "./style.css";
 import { loader, tiledMap } from "./resources.ts";
 import Player from "./Player.ts";
