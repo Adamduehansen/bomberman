@@ -9,18 +9,34 @@ import {
   range,
   Shape,
 } from "excalibur";
-import { Resources, spriteSheet } from "./resources.ts";
+import { spriteSheet } from "./resources.ts";
 import Bomb from "./Bomb.ts";
 
+interface Controls {
+  up: Keys;
+  right: Keys;
+  down: Keys;
+  left: Keys;
+  placeBomb: Keys;
+}
+
 export default class Player extends Actor {
-  constructor(args: ActorArgs) {
+  #controls: Controls;
+
+  constructor(
+    { x, y, controls }: Required<Pick<ActorArgs, "x" | "y">> & {
+      controls: Controls;
+    },
+  ) {
     super({
-      ...args,
+      x: x,
+      y: y,
       name: "Player",
       collider: Shape.Box(16, 16),
       collisionType: CollisionType.Active,
       z: 10,
     });
+    this.#controls = controls;
   }
 
   onInitialize(): void {
@@ -74,23 +90,23 @@ export default class Player extends Actor {
   }
 
   onPreUpdate(engine: Engine): void {
-    if (engine.input.keyboard.isHeld(Keys.S)) {
+    if (engine.input.keyboard.isHeld(this.#controls.down)) {
       this.graphics.use("walk-down");
       this.pos.y += 1;
     }
-    if (engine.input.keyboard.isHeld(Keys.W)) {
+    if (engine.input.keyboard.isHeld(this.#controls.up)) {
       this.graphics.use("walk-up");
       this.pos.y -= 1;
     }
-    if (engine.input.keyboard.isHeld(Keys.A)) {
+    if (engine.input.keyboard.isHeld(this.#controls.left)) {
       this.graphics.use("walk-left");
       this.pos.x -= 1;
     }
-    if (engine.input.keyboard.isHeld(Keys.D)) {
+    if (engine.input.keyboard.isHeld(this.#controls.right)) {
       this.graphics.use("walk-right");
       this.pos.x += 1;
     }
-    if (engine.input.keyboard.wasPressed(Keys.Space)) {
+    if (engine.input.keyboard.wasPressed(this.#controls.placeBomb)) {
       const bomb = new Bomb(this.pos);
       engine.add(bomb);
     }

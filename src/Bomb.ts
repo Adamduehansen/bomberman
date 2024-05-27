@@ -1,4 +1,11 @@
-import { Actor, ActorArgs, Animation, AnimationStrategy } from "excalibur";
+import {
+  Actor,
+  ActorArgs,
+  Animation,
+  AnimationStrategy,
+  CollisionType,
+  Shape,
+} from "excalibur";
 import { spriteSheet } from "./resources.ts";
 
 export default class Bomb extends Actor {
@@ -6,6 +13,8 @@ export default class Bomb extends Actor {
     super({
       x: x,
       y: y,
+      collisionType: CollisionType.Fixed,
+      collider: Shape.Circle(8),
     });
   }
 
