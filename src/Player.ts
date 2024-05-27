@@ -9,7 +9,8 @@ import {
   range,
   Shape,
 } from "excalibur";
-import { spriteSheet } from "./resources.ts";
+import { Resources, spriteSheet } from "./resources.ts";
+import Bomb from "./Bomb.ts";
 
 export default class Player extends Actor {
   constructor(args: ActorArgs) {
@@ -23,6 +24,15 @@ export default class Player extends Actor {
   }
 
   onInitialize(): void {
+    new Animation({
+      frames: [{
+        graphic: spriteSheet.getSprite(0, 0),
+        duration: 100,
+      }, {
+        graphic: spriteSheet.getSprite(1, 0),
+        duration: 100,
+      }],
+    });
     this.graphics.add("idle", spriteSheet.getSprite(4, 0));
     this.graphics.add(
       "walk-down",
@@ -79,6 +89,10 @@ export default class Player extends Actor {
     if (engine.input.keyboard.isHeld(Keys.D)) {
       this.graphics.use("walk-right");
       this.pos.x += 1;
+    }
+    if (engine.input.keyboard.wasPressed(Keys.Space)) {
+      const bomb = new Bomb(this.pos);
+      engine.add(bomb);
     }
 
     if (engine.input.keyboard.getKeys().length === 0) {
