@@ -3,8 +3,8 @@ import {
   ActorArgs,
   Animation,
   AnimationStrategy,
-  CollisionType,
-  Shape,
+  Engine,
+  Timer,
 } from "excalibur";
 import { spriteSheet } from "./resources.ts";
 
@@ -13,12 +13,10 @@ export default class Bomb extends Actor {
     super({
       x: x,
       y: y,
-      collisionType: CollisionType.Fixed,
-      collider: Shape.Circle(8),
     });
   }
 
-  onInitialize(): void {
+  onInitialize(engine: Engine): void {
     this.graphics.use(
       new Animation({
         frames: [
@@ -38,5 +36,14 @@ export default class Bomb extends Actor {
         strategy: AnimationStrategy.PingPong,
       }),
     );
+
+    const bombTimer = new Timer({
+      interval: 1000,
+      fcn: () => {
+        this.kill();
+      },
+    });
+    engine.addTimer(bombTimer);
+    bombTimer.start();
   }
 }

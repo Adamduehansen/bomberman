@@ -32,7 +32,7 @@ export default class Player extends Actor {
       x: x,
       y: y,
       name: "Player",
-      collider: Shape.Box(16, 16),
+      collider: Shape.Circle(8),
       collisionType: CollisionType.Active,
       z: 10,
     });
