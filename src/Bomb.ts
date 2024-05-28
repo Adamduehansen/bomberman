@@ -9,10 +9,16 @@ import {
 import { spriteSheet } from "./resources.ts";
 
 export default class Bomb extends Actor {
-  constructor({ x, y }: Required<Pick<ActorArgs, "x" | "y">>) {
-    super({
-      x: x,
-      y: y,
+  static snapToGrid({ x, y }: Required<Pick<ActorArgs, "x" | "y">>): Bomb {
+    const offsetFromSnappedX = (x - 16) % 16;
+    const snappedX = 8 + x - offsetFromSnappedX;
+
+    const offsetFromSnappedY = (y - 16) % 16;
+    const snappedY = 8 + y - offsetFromSnappedY;
+
+    return new Bomb({
+      x: snappedX,
+      y: snappedY,
     });
   }
 

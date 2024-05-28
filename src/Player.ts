@@ -107,7 +107,7 @@ export default class Player extends Actor {
       this.pos.x += 1;
     }
     if (engine.input.keyboard.wasPressed(this.#controls.placeBomb)) {
-      const bomb = new Bomb(this.pos);
+      const bomb = Bomb.snapToGrid(this.pos);
       engine.add(bomb);
     }
 
