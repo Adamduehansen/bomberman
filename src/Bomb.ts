@@ -7,6 +7,7 @@ import {
   Timer,
 } from "excalibur";
 import { spriteSheet } from "./resources.ts";
+import Explosion from "./Explosion.ts";
 
 export default class Bomb extends Actor {
   static snapToGrid({ x, y }: Required<Pick<ActorArgs, "x" | "y">>): Bomb {
@@ -46,6 +47,11 @@ export default class Bomb extends Actor {
     const bombTimer = new Timer({
       interval: 1000,
       fcn: () => {
+        const explosion = new Explosion({
+          x: this.pos.x,
+          y: this.pos.y,
+        });
+        engine.add(explosion);
         this.kill();
       },
     });

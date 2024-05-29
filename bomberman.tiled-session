@@ -3,20 +3,20 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "public/maps/map1.tmx",
     "expandedProjectPaths": [
-        ".",
-        "public",
+        "public/maps",
         "public/tiled-templates",
-        "public/maps"
+        "public",
+        "."
     ],
     "fileStates": {
         "public/maps/map1.tmx": {
-            "scale": 2,
+            "scale": 2.3065,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 140.25,
-                "y": 42.25
+                "x": 165.18534576197698,
+                "y": 134.83633210492087
             }
         },
         "public/maps/map1.tmx#Environment": {
@@ -31,6 +31,7 @@
     "map.tileWidth": 16,
     "map.width": 21,
     "openFiles": [
+        "public/maps/map1.tmx"
     ],
     "project": "bomberman.tiled-project",
     "property.type": "bool",
