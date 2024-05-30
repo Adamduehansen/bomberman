@@ -1,5 +1,5 @@
 import { ImageSource, Loader, SpriteSheet } from "excalibur";
-import { TiledResource } from "@excaliburjs/plugin-tiled";
+import map from "./Map.ts";
 
 export const Resources = {
   spriteSheet: new ImageSource("sprites/spritesheet.png"),
@@ -8,9 +8,7 @@ export const Resources = {
   ),
 } as const;
 
-export const tiledMap = new TiledResource("maps/map1.tmx");
-
-export const loader = new Loader([tiledMap]);
+export const loader = new Loader([map.tiledMap]);
 
 for (const resource of Object.values(Resources)) {
   loader.addResource(resource);

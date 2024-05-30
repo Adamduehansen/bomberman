@@ -1,5 +1,6 @@
 import { Actor, ActorArgs } from "excalibur";
 import { spriteSheet } from "./resources.ts";
+import map from "./Map.ts";
 
 export default class Explosion extends Actor {
   constructor({ x, y }: Required<Pick<ActorArgs, "x" | "y">>) {
@@ -21,6 +22,10 @@ export default class Explosion extends Actor {
   }
 
   #createTopArm() {
+    if (map.isWallAt(this.pos.x, this.pos.y - 16)) {
+      return;
+    }
+
     const explosionTopArm = new Actor({
       y: -16,
     });
@@ -35,6 +40,10 @@ export default class Explosion extends Actor {
   }
 
   #createRightArm() {
+    if (map.isWallAt(this.pos.x + 16, this.pos.y)) {
+      return;
+    }
+
     const explosionRightArm = new Actor({
       x: 16,
     });
@@ -49,6 +58,10 @@ export default class Explosion extends Actor {
   }
 
   #createBottomArm() {
+    if (map.isWallAt(this.pos.x, this.pos.y + 16)) {
+      return;
+    }
+
     const explosionBottomArm = new Actor({
       y: 16,
     });
@@ -63,6 +76,10 @@ export default class Explosion extends Actor {
   }
 
   #createLeftArm() {
+    if (map.isWallAt(this.pos.x - 16, this.pos.y)) {
+      return;
+    }
+
     const explosionLeftArm = new Actor({
       x: -16,
     });

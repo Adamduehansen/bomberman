@@ -1,8 +1,9 @@
 import { DisplayMode, Engine } from "excalibur";
 import "./style.css";
-import { loader, tiledMap } from "./resources.ts";
+import { loader } from "./resources.ts";
 import Player from "./Player.ts";
 import { Keys } from "excalibur";
+import map from "./Map.ts";
 
 const game = new Engine({
   suppressPlayButton: true,
@@ -13,11 +14,11 @@ const game = new Engine({
 });
 
 game.start(loader).then(() => {
-  tiledMap.addToScene(game.currentScene);
+  map.tiledMap.addToScene(game.currentScene);
 });
 
 game.on("initialize", () => {
-  const spawnPoints = tiledMap.getObjectsByClassName("spawn-point");
+  const spawnPoints = map.tiledMap.getObjectsByClassName("spawn-point");
   // const spawnPointIndex = Math.floor(randomInRange(0, spawnPoints.length));
 
   const player1SpawnPoint = spawnPoints[0];
