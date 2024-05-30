@@ -2,12 +2,19 @@ import { Actor, ActorArgs } from "excalibur";
 import { spriteSheet } from "./resources.ts";
 import map from "./Map.ts";
 
+interface Args extends Required<Pick<ActorArgs, "x" | "y">> {
+  maxLength: number;
+}
+
 export default class Explosion extends Actor {
-  constructor({ x, y }: Required<Pick<ActorArgs, "x" | "y">>) {
+  #maxLength: number;
+
+  constructor({ x, y, maxLength }: Args) {
     super({
       x: x,
       y: y,
     });
+    this.#maxLength = maxLength;
   }
 
   onInitialize(): void {
@@ -22,74 +29,106 @@ export default class Explosion extends Actor {
   }
 
   #createTopArm() {
-    if (map.isWallAt(this.pos.x, this.pos.y - 16)) {
-      return;
+    let lengthOfArm = 0;
+    for (let index = 1; index <= this.#maxLength; index++) {
+      if (map.isWallAt(this.pos.x, this.pos.y - index * 16)) {
+        break;
+      }
+      lengthOfArm += 1;
     }
 
-    const explosionTopArm = new Actor({
-      y: -16,
-    });
-    explosionTopArm.graphics.use(spriteSheet.getSprite(2, 5));
-    this.addChild(explosionTopArm);
-
-    const explosionTopEnd = new Actor({
-      y: -32,
-    });
-    explosionTopEnd.graphics.use(spriteSheet.getSprite(2, 4));
-    this.addChild(explosionTopEnd);
+    for (let index = 1; index <= lengthOfArm; index++) {
+      const explosionLane = new Actor({
+        y: -(index * 16),
+      });
+      if (index === lengthOfArm) {
+        explosionLane.graphics.use(spriteSheet.getSprite(2, 4));
+      } else {
+        explosionLane.graphics.use(spriteSheet.getSprite(2, 5));
+      }
+      this.addChild(explosionLane);
+    }
   }
 
   #createRightArm() {
-    if (map.isWallAt(this.pos.x + 16, this.pos.y)) {
-      return;
+    let lengthOfArm = 0;
+    for (let index = 1; index <= this.#maxLength; index++) {
+      if (map.isWallAt(this.pos.x + index * 16, this.pos.y)) {
+        break;
+      }
+      lengthOfArm += 1;
     }
 
-    const explosionRightArm = new Actor({
-      x: 16,
-    });
-    explosionRightArm.graphics.use(spriteSheet.getSprite(3, 6));
-    this.addChild(explosionRightArm);
-
-    const explosionRightEnd = new Actor({
-      x: 32,
-    });
-    explosionRightEnd.graphics.use(spriteSheet.getSprite(4, 6));
-    this.addChild(explosionRightEnd);
+    for (let index = 1; index <= lengthOfArm; index++) {
+      const explosionLane = new Actor({
+        x: index * 16,
+      });
+      if (index === lengthOfArm) {
+        explosionLane.graphics.use(spriteSheet.getSprite(4, 6));
+      } else {
+        explosionLane.graphics.use(spriteSheet.getSprite(3, 6));
+      }
+      this.addChild(explosionLane);
+    }
   }
 
   #createBottomArm() {
-    if (map.isWallAt(this.pos.x, this.pos.y + 16)) {
-      return;
+    let lengthOfArm = 0;
+    for (let index = 1; index <= this.#maxLength; index++) {
+      if (map.isWallAt(this.pos.x, this.pos.y + index * 16)) {
+        break;
+      }
+      lengthOfArm += 1;
     }
 
-    const explosionBottomArm = new Actor({
-      y: 16,
-    });
-    explosionBottomArm.graphics.use(spriteSheet.getSprite(2, 7));
-    this.addChild(explosionBottomArm);
-
-    const explosionBottomEnd = new Actor({
-      y: 32,
-    });
-    explosionBottomEnd.graphics.use(spriteSheet.getSprite(2, 8));
-    this.addChild(explosionBottomEnd);
+    for (let index = 1; index <= lengthOfArm; index++) {
+      const explosionLane = new Actor({
+        y: index * 16,
+      });
+      if (index === lengthOfArm) {
+        explosionLane.graphics.use(spriteSheet.getSprite(2, 8));
+      } else {
+        explosionLane.graphics.use(spriteSheet.getSprite(2, 7));
+      }
+      this.addChild(explosionLane);
+    }
   }
 
   #createLeftArm() {
-    if (map.isWallAt(this.pos.x - 16, this.pos.y)) {
-      return;
+    let lengthOfArm = 0;
+    for (let index = 1; index <= this.#maxLength; index++) {
+      if (map.isWallAt(this.pos.x - index * 16, this.pos.y)) {
+        break;
+      }
+      lengthOfArm += 1;
     }
 
-    const explosionLeftArm = new Actor({
-      x: -16,
-    });
-    explosionLeftArm.graphics.use(spriteSheet.getSprite(1, 6));
-    this.addChild(explosionLeftArm);
+    for (let index = 1; index <= lengthOfArm; index++) {
+      const explosionLane = new Actor({
+        x: -(index * 16),
+      });
+      if (index === lengthOfArm) {
+        explosionLane.graphics.use(spriteSheet.getSprite(0, 6));
+      } else {
+        explosionLane.graphics.use(spriteSheet.getSprite(1, 6));
+      }
+      this.addChild(explosionLane);
+    }
 
-    const explosionLeftEnd = new Actor({
-      x: -32,
-    });
-    explosionLeftEnd.graphics.use(spriteSheet.getSprite(0, 6));
-    this.addChild(explosionLeftEnd);
+    // if (map.isWallAt(this.pos.x - 16, this.pos.y)) {
+    //   return;
+    // }
+
+    // const explosionLeftArm = new Actor({
+    //   x: -16,
+    // });
+    // explosionLeftArm.graphics.use(spriteSheet.getSprite(1, 6));
+    // this.addChild(explosionLeftArm);
+
+    // const explosionLeftEnd = new Actor({
+    //   x: -32,
+    // });
+    // explosionLeftEnd.graphics.use(spriteSheet.getSprite(0, 6));
+    // this.addChild(explosionLeftEnd);
   }
 }

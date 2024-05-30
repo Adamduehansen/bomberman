@@ -50,6 +50,7 @@ export default class Bomb extends Actor {
         const explosion = new Explosion({
           x: this.pos.x,
           y: this.pos.y,
+          maxLength: 2,
         });
         engine.add(explosion);
         this.kill();
