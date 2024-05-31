@@ -24,6 +24,8 @@ interface Controls {
 export default class Player extends Actor {
   #controls: Controls;
 
+  #isKilled: boolean = false;
+
   constructor(
     { x, y, controls }: Required<Pick<ActorArgs, "x" | "y">> & {
       controls: Controls;
@@ -87,10 +89,27 @@ export default class Player extends Actor {
         AnimationStrategy.PingPong,
       ),
     );
+    const dieAnimation = Animation.fromSpriteSheet(
+      spriteSheet,
+      range(32, 38),
+      100,
+      AnimationStrategy.End,
+    );
+    dieAnimation.events.on("end", () => {
+      this.kill();
+    });
+    this.graphics.add(
+      "die",
+      dieAnimation,
+    );
     this.graphics.use("idle");
   }
 
   onPreUpdate(engine: Engine): void {
+    if (this.#isKilled) {
+      return;
+    }
+
     if (engine.input.keyboard.isHeld(this.#controls.down)) {
       this.graphics.use("walk-down");
       this.pos.y += 1;
@@ -119,7 +138,8 @@ export default class Player extends Actor {
 
   onCollisionStart(_self: Collider, other: Collider): void {
     if (other.owner.name === "explosion") {
-      this.kill();
+      this.#isKilled = true;
+      this.graphics.use("die");
     }
   }
 }
