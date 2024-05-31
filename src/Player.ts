@@ -3,6 +3,7 @@ import {
   ActorArgs,
   Animation,
   AnimationStrategy,
+  Collider,
   CollisionType,
   Engine,
   Keys,
@@ -113,6 +114,12 @@ export default class Player extends Actor {
 
     if (engine.input.keyboard.getKeys().length === 0) {
       this.graphics.use("idle");
+    }
+  }
+
+  onCollisionStart(_self: Collider, other: Collider): void {
+    if (other.owner.name === "explosion") {
+      this.kill();
     }
   }
 }

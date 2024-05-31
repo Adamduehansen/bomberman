@@ -1,4 +1,11 @@
-import { Actor, ActorArgs, Engine, Timer } from "excalibur";
+import {
+  Actor,
+  ActorArgs,
+  CollisionType,
+  Engine,
+  Shape,
+  Timer,
+} from "excalibur";
 import { spriteSheet } from "./resources.ts";
 import map from "./Map.ts";
 
@@ -14,8 +21,11 @@ export default class Explosion extends Actor {
 
   constructor({ x, y, maxLength }: Args) {
     super({
+      name: "explosion",
       x: x,
       y: y,
+      collider: Shape.Box(16, 16),
+      collisionType: CollisionType.Passive,
     });
     this.#maxLength = maxLength;
     this.#graphicsIndex = 1;
@@ -68,7 +78,10 @@ export default class Explosion extends Actor {
 
     for (let index = 1; index <= lengthOfArm; index++) {
       const explosionLane = new Actor({
+        name: "explosion",
         y: -(index * 16),
+        collider: Shape.Box(16, 16),
+        collisionType: CollisionType.Passive,
       });
       if (index === lengthOfArm) {
         explosionLane.graphics.use(spriteSheet.getSprite(2, 4));
@@ -90,7 +103,10 @@ export default class Explosion extends Actor {
 
     for (let index = 1; index <= lengthOfArm; index++) {
       const explosionLane = new Actor({
+        name: "explosion",
         x: index * 16,
+        collider: Shape.Box(16, 16),
+        collisionType: CollisionType.Passive,
       });
       if (index === lengthOfArm) {
         explosionLane.graphics.use(spriteSheet.getSprite(4, 6));
@@ -112,7 +128,10 @@ export default class Explosion extends Actor {
 
     for (let index = 1; index <= lengthOfArm; index++) {
       const explosionLane = new Actor({
+        name: "explosion",
         y: index * 16,
+        collider: Shape.Box(16, 16),
+        collisionType: CollisionType.Passive,
       });
       if (index === lengthOfArm) {
         explosionLane.graphics.use(spriteSheet.getSprite(2, 8));
@@ -134,7 +153,10 @@ export default class Explosion extends Actor {
 
     for (let index = 1; index <= lengthOfArm; index++) {
       const explosionLane = new Actor({
+        name: "explosion",
         x: -(index * 16),
+        collider: Shape.Box(16, 16),
+        collisionType: CollisionType.Passive,
       });
       if (index === lengthOfArm) {
         explosionLane.graphics.use(spriteSheet.getSprite(0, 6));
