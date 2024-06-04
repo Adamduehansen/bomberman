@@ -5,6 +5,7 @@ import {
   Engine,
   Shape,
   Timer,
+  vec,
 } from "excalibur";
 import { spriteSheet } from "./resources.ts";
 import map from "./Map.ts";
@@ -80,7 +81,9 @@ export default class Explosion extends Actor {
       const explosionLane = new Actor({
         name: "explosion",
         y: -(index * 16),
-        collider: Shape.Box(16, 16),
+        collider: index === lengthOfArm
+          ? Shape.Polygon([vec(-8, 8), vec(-8, 0), vec(8, 0), vec(8, 8)])
+          : Shape.Box(16, 16),
         collisionType: CollisionType.Passive,
       });
       if (index === lengthOfArm) {
@@ -105,7 +108,9 @@ export default class Explosion extends Actor {
       const explosionLane = new Actor({
         name: "explosion",
         x: index * 16,
-        collider: Shape.Box(16, 16),
+        collider: index === lengthOfArm
+          ? Shape.Polygon([vec(-8, -8), vec(0, -8), vec(0, 8), vec(-8, 8)])
+          : Shape.Box(16, 16),
         collisionType: CollisionType.Passive,
       });
       if (index === lengthOfArm) {
@@ -130,7 +135,9 @@ export default class Explosion extends Actor {
       const explosionLane = new Actor({
         name: "explosion",
         y: index * 16,
-        collider: Shape.Box(16, 16),
+        collider: index === lengthOfArm
+          ? Shape.Polygon([vec(-8, -8), vec(8, -8), vec(8, 0), vec(-8, 0)])
+          : Shape.Box(16, 16),
         collisionType: CollisionType.Passive,
       });
       if (index === lengthOfArm) {
@@ -155,7 +162,9 @@ export default class Explosion extends Actor {
       const explosionLane = new Actor({
         name: "explosion",
         x: -(index * 16),
-        collider: Shape.Box(16, 16),
+        collider: index === lengthOfArm
+          ? Shape.Polygon([vec(8, 8), vec(0, 8), vec(0, -8), vec(8, -8)])
+          : Shape.Box(16, 16),
         collisionType: CollisionType.Passive,
       });
       if (index === lengthOfArm) {
