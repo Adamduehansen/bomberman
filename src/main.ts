@@ -11,6 +11,7 @@ const game = new Engine({
   width: 336,
   height: 208,
   displayMode: DisplayMode.FillScreen,
+  maxFps: 60,
 });
 
 game.start(loader).then(() => {
