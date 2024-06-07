@@ -137,7 +137,7 @@ export default class Player extends Actor {
   }
 
   onCollisionStart(_self: Collider, other: Collider): void {
-    if (other.owner.name === "explosion") {
+    if (other.owner.name === "explosion" || other.owner.name === "balloon") {
       this.#isKilled = true;
       this.graphics.use("die");
       Resources.death.play(0.25);

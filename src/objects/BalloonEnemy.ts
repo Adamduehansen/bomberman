@@ -4,6 +4,7 @@ import {
   Animation,
   AnimationStrategy,
   Collider,
+  CollisionType,
   FromSpriteSheetOptions,
   Random,
   Shape,
@@ -88,8 +89,9 @@ export default class BalloonEnemy extends Actor {
   constructor(args: ActorArgs) {
     super({
       ...args,
-      name: "BalloonEnemy",
+      name: "balloon",
       collider: Shape.Circle(8),
+      collisionType: CollisionType.Passive,
       z: 10,
     });
     this.#destination = { x: this.pos.x, y: this.pos.y };
