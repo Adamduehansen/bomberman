@@ -98,8 +98,8 @@ export default class BalloonEnemy extends Actor {
   }
 
   onInitialize(): void {
-    this.graphics.add("walk-right", walkRightAnimation);
-    this.graphics.add("walk-left", walkLeftAnimation);
+    this.graphics.add("look-right", walkRightAnimation);
+    this.graphics.add("look-left", walkLeftAnimation);
     const dieAnimation = Animation.fromSpriteSheetCoordinates({
       spriteSheet: spriteSheet,
       frameCoordinates: dieAnimationFrames,
@@ -110,7 +110,7 @@ export default class BalloonEnemy extends Actor {
       this.kill();
     });
     this.graphics.add("die", dieAnimation);
-    this.graphics.use("walk-right");
+    this.graphics.use("look-right");
   }
 
   onPreUpdate(): void {
@@ -120,8 +120,15 @@ export default class BalloonEnemy extends Actor {
 
     if (this.#isAtDestination()) {
       const newDestination = this.#getNewDestination();
-      if (map.isWallAt(newDestination.x, newDestination.y) === null) {
-        this.#destination = newDestination;
+      if (map.isWallAt(newDestination.x, newDestination.y) !== null) {
+        return;
+      }
+
+      this.#destination = newDestination;
+      if (this.#destination.x < this.pos.x) {
+        this.graphics.use("look-left");
+      } else if (this.#destination.x > this.pos.x) {
+        this.graphics.use("look-right");
       }
     } else {
       if (this.pos.y < this.#destination.y) {
