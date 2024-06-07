@@ -1,6 +1,7 @@
 import { Engine, Keys, Scene } from "excalibur";
 import map from "./Map.ts";
 import Player from "./Player.ts";
+import BalloonEnemy from "./BalloonEnemy.ts";
 
 export default class GameScene extends Scene {
   onInitialize(engine: Engine): void {
@@ -21,19 +22,31 @@ export default class GameScene extends Scene {
     });
     engine.add(player1);
 
-    const player2SpawnPoint = spawnPoints[1];
-    const player2 = new Player({
-      x: player2SpawnPoint.x,
-      y: player2SpawnPoint.y,
-      controls: {
-        up: Keys.Up,
-        right: Keys.Right,
-        down: Keys.Down,
-        left: Keys.Left,
-        placeBomb: Keys.Enter,
-      },
+    const balloonEnemy1 = new BalloonEnemy({
+      x: 24,
+      y: 88,
     });
-    engine.add(player2);
+    engine.add(balloonEnemy1);
+
+    const balloonEnemy2 = new BalloonEnemy({
+      x: 88,
+      y: 24,
+    });
+    engine.add(balloonEnemy2);
+
+    // const player2SpawnPoint = spawnPoints[1];
+    // const player2 = new Player({
+    //   x: player2SpawnPoint.x,
+    //   y: player2SpawnPoint.y,
+    //   controls: {
+    //     up: Keys.Up,
+    //     right: Keys.Right,
+    //     down: Keys.Down,
+    //     left: Keys.Left,
+    //     placeBomb: Keys.Enter,
+    //   },
+    // });
+    // engine.add(player2);
 
     map.tiledMap.addToScene(this);
 
