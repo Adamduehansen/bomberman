@@ -10,7 +10,7 @@ import {
   range,
   Shape,
 } from "excalibur";
-import { spriteSheet } from "./resources.ts";
+import { Resources, spriteSheet } from "./resources.ts";
 import Bomb from "./Bomb.ts";
 
 interface Controls {
@@ -140,6 +140,7 @@ export default class Player extends Actor {
     if (other.owner.name === "explosion") {
       this.#isKilled = true;
       this.graphics.use("die");
+      Resources.death.play(0.25);
     }
   }
 }

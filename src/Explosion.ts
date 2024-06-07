@@ -3,13 +3,15 @@ import {
   ActorArgs,
   CollisionType,
   Engine,
+  randomInRange,
   Shape,
+  Sound,
   Sprite,
   Timer,
   vec,
   Vector,
 } from "excalibur";
-import { spriteSheet } from "./resources.ts";
+import { Resources, spriteSheet } from "./resources.ts";
 import map from "./Map.ts";
 
 const NUMBER_OF_FRAMES_IN_ANIMATION = 7;
@@ -172,6 +174,8 @@ export default class Explosion extends Actor {
   }
 
   onInitialize(engine: Engine): void {
+    this.#getExplosionSound(Math.floor(randomInRange(1, 3))).play();
+
     this.addChild(new ExplosionCenter());
 
     this.#createTopArm();
@@ -199,6 +203,17 @@ export default class Explosion extends Actor {
 
     engine.addTimer(timer);
     timer.start();
+  }
+
+  #getExplosionSound(index: number): Sound {
+    switch (index) {
+      case 1:
+        return Resources.explosion1;
+      case 2:
+        return Resources.explosion2;
+      default:
+        throw new Error(`Explosion not found for index: ${index}`);
+    }
   }
 
   #createTopArm() {

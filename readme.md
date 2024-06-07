@@ -2,4 +2,5 @@
 
 ## Assets
 
-Spritesheet used: https://www.spriters-resource.com/nes/bomberman
+- Spritesheet: https://www.spriters-resource.com/nes/bomberman
+- Sounds: https://kronbits.itch.io/freesfx

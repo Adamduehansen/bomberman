@@ -1,4 +1,4 @@
-import { ImageSource, Loader, SpriteSheet } from "excalibur";
+import { ImageSource, Loader, Sound, SpriteSheet } from "excalibur";
 import map from "./Map.ts";
 
 export const Resources = {
@@ -6,6 +6,9 @@ export const Resources = {
   spriteSheetTransparent: new ImageSource(
     "sprites/spritesheet_transparent.png",
   ),
+  explosion1: new Sound("sounds/explosion1.wav"),
+  explosion2: new Sound("sounds/explosion2.wav"),
+  death: new Sound("sounds/death.wav"),
 } as const;
 
 export const loader = new Loader([map.tiledMap]);
