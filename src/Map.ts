@@ -18,8 +18,8 @@ class Map {
     });
   }
 
-  isWallAt(x: number, y: number) {
-    return this.tiledMap.getTileByPoint("walls", vec(x, y));
+  isWallAt(x: number, y: number): boolean {
+    return this.tiledMap.getTileByPoint("walls", vec(x, y)) !== null;
   }
 }
 

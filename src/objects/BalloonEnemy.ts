@@ -120,7 +120,7 @@ export default class BalloonEnemy extends Actor {
 
     if (this.#isAtDestination()) {
       const newDestination = this.#getNewDestination();
-      if (map.isWallAt(newDestination.x, newDestination.y) !== null) {
+      if (map.isWallAt(newDestination.x, newDestination.y)) {
         return;
       }
 
