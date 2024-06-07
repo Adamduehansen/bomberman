@@ -5,6 +5,7 @@ import {
   AnimationStrategy,
   Collider,
   CollisionType,
+  Engine,
   FromSpriteSheetOptions,
   Random,
   Shape,
@@ -113,14 +114,23 @@ export default class BalloonEnemy extends Actor {
     this.graphics.use("look-right");
   }
 
-  onPreUpdate(): void {
+  onPreUpdate(engine: Engine): void {
     if (this.#isKilled) {
       return;
     }
 
     if (this.#isAtDestination()) {
       const newDestination = this.#getNewDestination();
-      if (map.isWallAt(newDestination.x, newDestination.y)) {
+      const destructableWalls = engine.currentScene.actors.filter((actor) =>
+        actor.name === "Destructable Wall"
+      );
+
+      if (
+        map.isWallAt(newDestination.x, newDestination.y) ||
+        destructableWalls.some((wall) =>
+          wall.pos.x === newDestination.x && wall.pos.y === newDestination.y
+        )
+      ) {
         return;
       }
 

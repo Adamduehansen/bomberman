@@ -71,6 +71,7 @@ class ExplosionLane extends Actor {
     direction: Direction;
   }) {
     super({
+      name: "explosion",
       x: x,
       y: y,
       collider: Shape.Box(16, 16),
