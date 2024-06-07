@@ -1,7 +1,7 @@
 import { Engine, Keys, Scene } from "excalibur";
 import map from "./Map.ts";
-import Player from "./Player.ts";
-import BalloonEnemy from "./BalloonEnemy.ts";
+import Player from "./objects/Player.ts";
+import BalloonEnemy from "./objects/BalloonEnemy.ts";
 
 export default class GameScene extends Scene {
   onInitialize(engine: Engine): void {

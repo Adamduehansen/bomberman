@@ -6,7 +6,7 @@ import {
   Engine,
   Timer,
 } from "excalibur";
-import { spriteSheet } from "./resources.ts";
+import { spriteSheet } from "../resources.ts";
 import Explosion from "./Explosion.ts";
 
 export default class Bomb extends Actor {

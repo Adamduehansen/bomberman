@@ -11,8 +11,8 @@ import {
   vec,
   Vector,
 } from "excalibur";
-import { Resources, spriteSheet } from "./resources.ts";
-import map from "./Map.ts";
+import { Resources, spriteSheet } from "../resources.ts";
+import map from "../Map.ts";
 
 const NUMBER_OF_FRAMES_IN_ANIMATION = 7;
 

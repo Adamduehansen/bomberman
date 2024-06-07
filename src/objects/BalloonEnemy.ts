@@ -5,8 +5,8 @@ import {
   AnimationStrategy,
   Random,
 } from "excalibur";
-import { spriteSheet } from "./resources.ts";
-import map from "./Map.ts";
+import { spriteSheet } from "../resources.ts";
+import map from "../Map.ts";
 
 const walkRightAnimation = Animation.fromSpriteSheetCoordinates({
   spriteSheet: spriteSheet,

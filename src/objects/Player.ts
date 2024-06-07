@@ -10,7 +10,7 @@ import {
   range,
   Shape,
 } from "excalibur";
-import { Resources, spriteSheet } from "./resources.ts";
+import { Resources, spriteSheet } from "../resources.ts";
 import Bomb from "./Bomb.ts";
 
 interface Controls {
