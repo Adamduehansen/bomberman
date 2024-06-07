@@ -7,6 +7,7 @@ import {
   Sprite,
   Timer,
   vec,
+  Vector,
 } from "excalibur";
 import { spriteSheet } from "./resources.ts";
 import map from "./Map.ts";
@@ -17,7 +18,7 @@ interface Args extends Required<Pick<ActorArgs, "x" | "y">> {
   maxLength: number;
 }
 
-type Direction = "top";
+type Direction = "top" | "right" | "buttom" | "left";
 
 class ExplosionCenter extends Actor {
   onInitialize(): void {
@@ -40,6 +41,24 @@ const EXPLOSION_LANE_SPRITE_MAP: {
     spriteSheet.getSprite(7, 5),
     spriteSheet.getSprite(2, 10),
     spriteSheet.getSprite(7, 10),
+  ],
+  right: [
+    spriteSheet.getSprite(3, 6),
+    spriteSheet.getSprite(8, 6),
+    spriteSheet.getSprite(3, 11),
+    spriteSheet.getSprite(8, 11),
+  ],
+  buttom: [
+    spriteSheet.getSprite(2, 7),
+    spriteSheet.getSprite(7, 7),
+    spriteSheet.getSprite(2, 12),
+    spriteSheet.getSprite(7, 12),
+  ],
+  left: [
+    spriteSheet.getSprite(1, 6),
+    spriteSheet.getSprite(6, 6),
+    spriteSheet.getSprite(1, 11),
+    spriteSheet.getSprite(6, 11),
   ],
 };
 
@@ -79,6 +98,33 @@ const EXPLOSION_END_SPRITE_MAP: {
     spriteSheet.getSprite(2, 9),
     spriteSheet.getSprite(7, 9),
   ],
+  right: [
+    spriteSheet.getSprite(4, 6),
+    spriteSheet.getSprite(9, 6),
+    spriteSheet.getSprite(4, 11),
+    spriteSheet.getSprite(9, 11),
+  ],
+  buttom: [
+    spriteSheet.getSprite(2, 8),
+    spriteSheet.getSprite(7, 8),
+    spriteSheet.getSprite(2, 13),
+    spriteSheet.getSprite(7, 13),
+  ],
+  left: [
+    spriteSheet.getSprite(0, 6),
+    spriteSheet.getSprite(5, 6),
+    spriteSheet.getSprite(0, 11),
+    spriteSheet.getSprite(5, 11),
+  ],
+};
+
+const EXPLOSION_END_COLLIDER_VECTORS: {
+  [key in Direction]: Vector[];
+} = {
+  top: [vec(-8, 8), vec(-8, 0), vec(8, 0), vec(8, 8)],
+  right: [vec(-8, -8), vec(0, -8), vec(0, 8), vec(-8, 8)],
+  buttom: [vec(-8, -8), vec(8, -8), vec(8, 0), vec(-8, 0)],
+  left: [vec(8, 8), vec(0, 8), vec(0, -8), vec(8, -8)],
 };
 
 class ExplosionEnd extends Actor {
@@ -91,7 +137,7 @@ class ExplosionEnd extends Actor {
       name: "explosion",
       x: x,
       y: y,
-      collider: Shape.Polygon([vec(-8, 8), vec(-8, 0), vec(8, 0), vec(8, 8)]),
+      collider: Shape.Polygon(EXPLOSION_END_COLLIDER_VECTORS[direction]),
       collisionType: CollisionType.Passive,
     });
     this.#direction = direction;
@@ -129,9 +175,9 @@ export default class Explosion extends Actor {
     this.addChild(new ExplosionCenter());
 
     this.#createTopArm();
-    // this.#createRightArm();
-    // this.#createBottomArm();
-    // this.#createLeftArm();
+    this.#createRightArm();
+    this.#createBottomArm();
+    this.#createLeftArm();
 
     const timer = new Timer({
       fcn: () => {
@@ -142,6 +188,7 @@ export default class Explosion extends Actor {
 
         this.#graphicsIndex += 1;
         this.children.forEach((children) => {
+          // @ts-ignore Every explosion has a graphic component.
           children.graphics.use(this.#graphicsIndex.toString());
         });
       },
@@ -192,20 +239,21 @@ export default class Explosion extends Actor {
     }
 
     for (let index = 1; index <= lengthOfArm; index++) {
-      const explosionLane = new Actor({
-        name: "explosion",
-        x: index * 16,
-        collider: index === lengthOfArm
-          ? Shape.Polygon([vec(-8, -8), vec(0, -8), vec(0, 8), vec(-8, 8)])
-          : Shape.Box(16, 16),
-        collisionType: CollisionType.Passive,
-      });
       if (index === lengthOfArm) {
-        explosionLane.graphics.use(spriteSheet.getSprite(4, 6));
+        this.addChild(
+          new ExplosionEnd({
+            x: index * 16,
+            direction: "right",
+          }),
+        );
       } else {
-        explosionLane.graphics.use(spriteSheet.getSprite(3, 6));
+        this.addChild(
+          new ExplosionLane({
+            x: index * 16,
+            direction: "right",
+          }),
+        );
       }
-      this.addChild(explosionLane);
     }
   }
 
@@ -219,20 +267,21 @@ export default class Explosion extends Actor {
     }
 
     for (let index = 1; index <= lengthOfArm; index++) {
-      const explosionLane = new Actor({
-        name: "explosion",
-        y: index * 16,
-        collider: index === lengthOfArm
-          ? Shape.Polygon([vec(-8, -8), vec(8, -8), vec(8, 0), vec(-8, 0)])
-          : Shape.Box(16, 16),
-        collisionType: CollisionType.Passive,
-      });
       if (index === lengthOfArm) {
-        explosionLane.graphics.use(spriteSheet.getSprite(2, 8));
+        this.addChild(
+          new ExplosionEnd({
+            y: index * 16,
+            direction: "buttom",
+          }),
+        );
       } else {
-        explosionLane.graphics.use(spriteSheet.getSprite(2, 7));
+        this.addChild(
+          new ExplosionLane({
+            y: index * 16,
+            direction: "buttom",
+          }),
+        );
       }
-      this.addChild(explosionLane);
     }
   }
 
@@ -246,20 +295,21 @@ export default class Explosion extends Actor {
     }
 
     for (let index = 1; index <= lengthOfArm; index++) {
-      const explosionLane = new Actor({
-        name: "explosion",
-        x: -(index * 16),
-        collider: index === lengthOfArm
-          ? Shape.Polygon([vec(8, 8), vec(0, 8), vec(0, -8), vec(8, -8)])
-          : Shape.Box(16, 16),
-        collisionType: CollisionType.Passive,
-      });
       if (index === lengthOfArm) {
-        explosionLane.graphics.use(spriteSheet.getSprite(0, 6));
+        this.addChild(
+          new ExplosionEnd({
+            x: -(index * 16),
+            direction: "left",
+          }),
+        );
       } else {
-        explosionLane.graphics.use(spriteSheet.getSprite(1, 6));
+        this.addChild(
+          new ExplosionLane({
+            x: -(index * 16),
+            direction: "left",
+          }),
+        );
       }
-      this.addChild(explosionLane);
     }
   }
 }
