@@ -197,7 +197,7 @@ export default class Explosion extends Actor {
           children.graphics.use(this.#graphicsIndex.toString());
         });
       },
-      interval: 200,
+      interval: 100,
       numberOfRepeats: NUMBER_OF_FRAMES_IN_ANIMATION,
       repeats: true,
     });
