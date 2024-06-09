@@ -28,6 +28,8 @@ type PlayerArgs = Required<Pick<ActorArgs, "x" | "y">> & {
   controls: Controls;
 };
 
+const SPEED = 60;
+
 export default class Player extends Actor {
   #controls: Controls;
 
@@ -107,18 +109,18 @@ export default class Player extends Actor {
 
     if (engine.input.keyboard.isHeld(this.#controls.down)) {
       this.graphics.use("walk-down");
-      this.vel.y = 60;
+      this.vel.y = SPEED;
     } else if (engine.input.keyboard.isHeld(this.#controls.up)) {
       this.graphics.use("walk-up");
-      this.vel.y = -60;
+      this.vel.y = -SPEED;
     }
 
     if (engine.input.keyboard.isHeld(this.#controls.left)) {
       this.graphics.use("walk-left");
-      this.vel.x = -60;
+      this.vel.x = -SPEED;
     } else if (engine.input.keyboard.isHeld(this.#controls.right)) {
       this.graphics.use("walk-right");
-      this.vel.x = 60;
+      this.vel.x = SPEED;
     }
     if (engine.input.keyboard.wasPressed(this.#controls.placeBomb)) {
       const bomb = Bomb.snapToGrid(this.pos);
