@@ -140,7 +140,7 @@ export default class Player extends Actor {
     if (other.owner.name === "explosion" || other.owner.name === "balloon") {
       this.#isKilled = true;
       this.graphics.use("die");
-      Resources.death.play(0.25);
+      Resources.death.play(0.15);
     }
   }
 }
