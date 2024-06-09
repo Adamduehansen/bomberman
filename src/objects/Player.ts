@@ -46,15 +46,6 @@ export default class Player extends Actor {
   }
 
   onInitialize(): void {
-    new Animation({
-      frames: [{
-        graphic: spriteSheet.getSprite(0, 0),
-        duration: 100,
-      }, {
-        graphic: spriteSheet.getSprite(1, 0),
-        duration: 100,
-      }],
-    });
     this.graphics.add("idle", spriteSheet.getSprite(4, 0));
     this.graphics.add(
       "walk-down",
