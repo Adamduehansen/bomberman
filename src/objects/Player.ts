@@ -11,6 +11,7 @@ import {
   range,
   Scene,
   Shape,
+  Vector,
 } from "excalibur";
 import { Resources, spriteSheet } from "../resources.ts";
 import Bomb from "./Bomb.ts";
@@ -26,7 +27,7 @@ interface Controls {
 export default class Player extends Actor {
   #controls: Controls;
 
-  #isKilled: boolean = false;
+  #disableControls: boolean = false;
 
   constructor(
     { x, y, controls }: Required<Pick<ActorArgs, "x" | "y">> & {
@@ -108,25 +109,25 @@ export default class Player extends Actor {
   }
 
   onPreUpdate(engine: Engine): void {
-    if (this.#isKilled) {
+    if (this.#disableControls) {
+      this.#stopMovement();
       return;
     }
 
     if (engine.input.keyboard.isHeld(this.#controls.down)) {
       this.graphics.use("walk-down");
-      this.pos.y += 1;
-    }
-    if (engine.input.keyboard.isHeld(this.#controls.up)) {
+      this.vel.y = 60;
+    } else if (engine.input.keyboard.isHeld(this.#controls.up)) {
       this.graphics.use("walk-up");
-      this.pos.y -= 1;
+      this.vel.y = -60;
     }
+
     if (engine.input.keyboard.isHeld(this.#controls.left)) {
       this.graphics.use("walk-left");
-      this.pos.x -= 1;
-    }
-    if (engine.input.keyboard.isHeld(this.#controls.right)) {
+      this.vel.x = -60;
+    } else if (engine.input.keyboard.isHeld(this.#controls.right)) {
       this.graphics.use("walk-right");
-      this.pos.x += 1;
+      this.vel.x = 60;
     }
     if (engine.input.keyboard.wasPressed(this.#controls.placeBomb)) {
       const bomb = Bomb.snapToGrid(this.pos);
@@ -135,12 +136,13 @@ export default class Player extends Actor {
 
     if (engine.input.keyboard.getKeys().length === 0) {
       this.graphics.use("idle");
+      this.#stopMovement();
     }
   }
 
   onCollisionStart(_self: Collider, other: Collider): void {
     if (other.owner.name === "explosion" || other.owner.name === "balloon") {
-      this.#isKilled = true;
+      this.#disableControls = true;
       this.graphics.use("die");
       Resources.death.play(0.15);
     }
@@ -151,5 +153,9 @@ export default class Player extends Actor {
       destinationIn: new FadeInOut({ duration: 200, direction: "in" }),
       sourceOut: new FadeInOut({ duration: 500, direction: "out" }),
     });
+  }
+
+  #stopMovement(): void {
+    this.vel = Vector.Zero;
   }
 }
