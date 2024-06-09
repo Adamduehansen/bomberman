@@ -1,8 +1,8 @@
 import { DisplayMode, Engine } from "excalibur";
 import "./style.css";
 import { loader } from "./resources.ts";
-import GameScene from "./GameScene.ts";
-import GameOverScene from "./GameOverScene.ts";
+import GameScene from "./scenes/GameScene.ts";
+import GameOverScene from "./scenes/GameOverScene.ts";
 
 const game = new Engine({
   suppressPlayButton: true,
