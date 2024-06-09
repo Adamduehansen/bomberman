@@ -179,10 +179,10 @@ export default class Explosion extends Actor {
 
     this.addChild(new ExplosionCenter());
 
-    this.#createTopArm();
-    this.#createRightArm();
-    this.#createBottomArm();
-    this.#createLeftArm();
+    this.#createTopArm(engine);
+    this.#createRightArm(engine);
+    this.#createBottomArm(engine);
+    this.#createLeftArm(engine);
 
     const timer = new Timer({
       fcn: () => {
@@ -217,12 +217,22 @@ export default class Explosion extends Actor {
     }
   }
 
-  #createTopArm() {
+  #createTopArm(engine: Engine) {
     let lengthOfArm = 0;
     for (let index = 1; index <= this.#maxLength; index++) {
       if (map.isWallAt(this.pos.x, this.pos.y - index * 16)) {
         break;
       }
+      if (
+        engine.currentScene.actors.filter((actor) =>
+          actor.name === "Destructable Wall"
+        ).some((wall) =>
+          wall.pos.x === this.pos.x && wall.pos.y === this.pos.y - index * 16
+        )
+      ) {
+        lengthOfArm += 1;
+        break;
+      }
       lengthOfArm += 1;
     }
 
@@ -245,12 +255,22 @@ export default class Explosion extends Actor {
     }
   }
 
-  #createRightArm() {
+  #createRightArm(engine: Engine) {
     let lengthOfArm = 0;
     for (let index = 1; index <= this.#maxLength; index++) {
       if (map.isWallAt(this.pos.x + index * 16, this.pos.y)) {
         break;
       }
+      if (
+        engine.currentScene.actors.filter((actor) =>
+          actor.name === "Destructable Wall"
+        ).some((wall) =>
+          wall.pos.x === this.pos.x + index * 16 && wall.pos.y === this.pos.y
+        )
+      ) {
+        lengthOfArm += 1;
+        break;
+      }
       lengthOfArm += 1;
     }
 
@@ -273,10 +293,20 @@ export default class Explosion extends Actor {
     }
   }
 
-  #createBottomArm() {
+  #createBottomArm(engine: Engine) {
     let lengthOfArm = 0;
     for (let index = 1; index <= this.#maxLength; index++) {
       if (map.isWallAt(this.pos.x, this.pos.y + index * 16)) {
+        break;
+      }
+      if (
+        engine.currentScene.actors.filter((actor) =>
+          actor.name === "Destructable Wall"
+        ).some((wall) =>
+          wall.pos.x === this.pos.x && wall.pos.y === this.pos.y + index * 16
+        )
+      ) {
+        lengthOfArm += 1;
         break;
       }
       lengthOfArm += 1;
@@ -301,10 +331,20 @@ export default class Explosion extends Actor {
     }
   }
 
-  #createLeftArm() {
+  #createLeftArm(engine: Engine) {
     let lengthOfArm = 0;
     for (let index = 1; index <= this.#maxLength; index++) {
       if (map.isWallAt(this.pos.x - index * 16, this.pos.y)) {
+        break;
+      }
+      if (
+        engine.currentScene.actors.filter((actor) =>
+          actor.name === "Destructable Wall"
+        ).some((wall) =>
+          wall.pos.x === this.pos.x - index * 16 && wall.pos.y === this.pos.y
+        )
+      ) {
+        lengthOfArm += 1;
         break;
       }
       lengthOfArm += 1;
