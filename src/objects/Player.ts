@@ -6,8 +6,10 @@ import {
   Collider,
   CollisionType,
   Engine,
+  FadeInOut,
   Keys,
   range,
+  Scene,
   Shape,
 } from "excalibur";
 import { Resources, spriteSheet } from "../resources.ts";
@@ -142,5 +144,12 @@ export default class Player extends Actor {
       this.graphics.use("die");
       Resources.death.play(0.15);
     }
+  }
+
+  onPostKill(scene: Scene): void {
+    scene.engine.goToScene("gameoverscene", {
+      destinationIn: new FadeInOut({ duration: 200, direction: "in" }),
+      sourceOut: new FadeInOut({ duration: 500, direction: "out" }),
+    });
   }
 }
