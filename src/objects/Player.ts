@@ -24,16 +24,16 @@ interface Controls {
   placeBomb: Keys;
 }
 
+type PlayerArgs = Required<Pick<ActorArgs, "x" | "y">> & {
+  controls: Controls;
+};
+
 export default class Player extends Actor {
   #controls: Controls;
 
   #disableControls: boolean = false;
 
-  constructor(
-    { x, y, controls }: Required<Pick<ActorArgs, "x" | "y">> & {
-      controls: Controls;
-    },
-  ) {
+  constructor({ x, y, controls }: PlayerArgs) {
     super({
       x: x,
       y: y,
