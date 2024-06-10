@@ -9,6 +9,7 @@ import {
   FromSpriteSheetOptions,
   Random,
   Shape,
+  Vector,
 } from "excalibur";
 import { Resources, spriteSheet } from "../resources.ts";
 import map from "../Map.ts";
@@ -85,7 +86,7 @@ type Destination = Required<Pick<ActorArgs, "x" | "y">>;
 export default class BalloonEnemy extends Actor {
   #destination: Destination;
 
-  #isKilled: boolean = false;
+  #disableControls: boolean = false;
 
   constructor(args: ActorArgs) {
     super({
@@ -115,11 +116,13 @@ export default class BalloonEnemy extends Actor {
   }
 
   onPreUpdate(engine: Engine): void {
-    if (this.#isKilled) {
+    if (this.#disableControls) {
+      this.#stopMovement();
       return;
     }
 
     if (this.#isAtDestination()) {
+      this.#stopMovement();
       const newDestination = this.#getNewDestination();
       const destructableWalls = engine.currentScene.actors.filter((actor) =>
         actor.name === "Destructable Wall"
@@ -142,21 +145,21 @@ export default class BalloonEnemy extends Actor {
       }
     } else {
       if (this.pos.y < this.#destination.y) {
-        this.pos.y += 0.5;
+        this.vel.y = 30;
       } else if (this.pos.y > this.#destination.y) {
-        this.pos.y -= 0.5;
+        this.vel.y = -30;
       }
       if (this.pos.x < this.#destination.x) {
-        this.pos.x += 0.5;
+        this.vel.x = 30;
       } else if (this.pos.x > this.#destination.x) {
-        this.pos.x -= 0.5;
+        this.vel.x = -30;
       }
     }
   }
 
   onCollisionStart(_self: Collider, other: Collider): void {
     if (other.owner.name === "explosion") {
-      this.#isKilled = true;
+      this.#disableControls = true;
       this.graphics.use("die");
       Resources.balloonExplode.play();
     }
@@ -183,5 +186,9 @@ export default class BalloonEnemy extends Actor {
       case "left":
         return { x: this.pos.x - 16, y: this.pos.y };
     }
+  }
+
+  #stopMovement(): void {
+    this.vel = Vector.Zero;
   }
 }
