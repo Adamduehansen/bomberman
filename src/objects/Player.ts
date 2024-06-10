@@ -6,7 +6,6 @@ import {
   Collider,
   CollisionType,
   Engine,
-  FadeInOut,
   Keys,
   range,
   Scene,
@@ -15,6 +14,7 @@ import {
 } from "excalibur";
 import { Resources, spriteSheet } from "../resources.ts";
 import Bomb from "./Bomb.ts";
+import SceneManager from "../SceneManager.ts";
 
 interface Controls {
   up: Keys;
@@ -142,10 +142,7 @@ export default class Player extends Actor {
   }
 
   onPostKill(scene: Scene): void {
-    scene.engine.goToScene("gameoverscene", {
-      destinationIn: new FadeInOut({ duration: 200, direction: "in" }),
-      sourceOut: new FadeInOut({ duration: 500, direction: "out" }),
-    });
+    SceneManager.goToScene(scene.engine, "gamescene");
   }
 
   #stopMovement(): void {
