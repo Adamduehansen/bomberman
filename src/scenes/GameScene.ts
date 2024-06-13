@@ -1,7 +1,6 @@
 import { Engine, Keys, randomInRange, Scene } from "excalibur";
 import map from "../Map.ts";
 import Player from "../objects/Player.ts";
-import BalloonEnemy from "../objects/BalloonEnemy.ts";
 
 export default class GameScene extends Scene {
   onInitialize(engine: Engine): void {
@@ -21,18 +20,6 @@ export default class GameScene extends Scene {
       },
     });
     engine.add(player1);
-
-    const balloonEnemy1 = new BalloonEnemy({
-      x: 24,
-      y: 88,
-    });
-    engine.add(balloonEnemy1);
-
-    const balloonEnemy2 = new BalloonEnemy({
-      x: 88,
-      y: 24,
-    });
-    engine.add(balloonEnemy2);
 
     map.tiledMap.addToScene(this);
 

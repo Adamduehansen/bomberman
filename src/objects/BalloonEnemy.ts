@@ -14,46 +14,6 @@ import {
 import { Resources, spriteSheet } from "../resources.ts";
 import map from "../Map.ts";
 
-const walkRightAnimation = Animation.fromSpriteSheetCoordinates({
-  spriteSheet: spriteSheet,
-  frameCoordinates: [
-    {
-      x: 0,
-      y: 15,
-    },
-    {
-      x: 1,
-      y: 15,
-    },
-    {
-      x: 2,
-      y: 15,
-    },
-  ],
-  durationPerFrameMs: 200,
-  strategy: AnimationStrategy.PingPong,
-});
-
-const walkLeftAnimation = Animation.fromSpriteSheetCoordinates({
-  spriteSheet: spriteSheet,
-  frameCoordinates: [
-    {
-      x: 3,
-      y: 15,
-    },
-    {
-      x: 4,
-      y: 15,
-    },
-    {
-      x: 5,
-      y: 15,
-    },
-  ],
-  durationPerFrameMs: 200,
-  strategy: AnimationStrategy.PingPong,
-});
-
 const dieAnimationFrames: FromSpriteSheetOptions["frameCoordinates"] = [
   {
     x: 6,
@@ -100,6 +60,46 @@ export default class BalloonEnemy extends Actor {
   }
 
   onInitialize(): void {
+    const walkRightAnimation = Animation.fromSpriteSheetCoordinates({
+      spriteSheet: spriteSheet,
+      frameCoordinates: [
+        {
+          x: 0,
+          y: 15,
+        },
+        {
+          x: 1,
+          y: 15,
+        },
+        {
+          x: 2,
+          y: 15,
+        },
+      ],
+      durationPerFrameMs: 200,
+      strategy: AnimationStrategy.PingPong,
+    });
+
+    const walkLeftAnimation = Animation.fromSpriteSheetCoordinates({
+      spriteSheet: spriteSheet,
+      frameCoordinates: [
+        {
+          x: 3,
+          y: 15,
+        },
+        {
+          x: 4,
+          y: 15,
+        },
+        {
+          x: 5,
+          y: 15,
+        },
+      ],
+      durationPerFrameMs: 200,
+      strategy: AnimationStrategy.PingPong,
+    });
+
     this.graphics.add("look-right", walkRightAnimation);
     this.graphics.add("look-left", walkLeftAnimation);
     const dieAnimation = Animation.fromSpriteSheetCoordinates({

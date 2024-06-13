@@ -1,6 +1,7 @@
 import { TiledResource } from "@excaliburjs/plugin-tiled";
 import { vec } from "excalibur";
 import DestructableWall from "./objects/DestructableWall.ts";
+import BalloonEnemy from "./objects/BalloonEnemy.ts";
 
 class Map {
   tiledMap: TiledResource;
@@ -10,6 +11,12 @@ class Map {
       entityClassNameFactories: {
         "destructable-wall": function (props) {
           return new DestructableWall({
+            x: props.worldPos.x + 8,
+            y: props.worldPos.y - 8,
+          });
+        },
+        "balloon-enemy": function (props) {
+          return new BalloonEnemy({
             x: props.worldPos.x + 8,
             y: props.worldPos.y - 8,
           });
