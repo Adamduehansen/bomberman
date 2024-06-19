@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="21" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="55">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="21" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="65">
  <tileset firstgid="1" name="Environment" tilewidth="16" tileheight="16" tilecount="322" columns="14">
   <image source="../sprites/spritesheet.png" width="224" height="383"/>
  </tileset>
@@ -65,20 +65,27 @@
   <object id="41" template="../tiled-templates/destructable-wall.tx" x="208" y="160"/>
   <object id="42" template="../tiled-templates/destructable-wall.tx" x="240" y="192"/>
   <object id="43" template="../tiled-templates/destructable-wall.tx" x="272" y="64"/>
-  <object id="44" template="../tiled-templates/balloon-enemy.tx" x="176" y="64"/>
-  <object id="45" template="../tiled-templates/balloon-enemy.tx" x="176" y="128"/>
-  <object id="46" template="../tiled-templates/balloon-enemy.tx" x="256" y="128"/>
-  <object id="47" template="../tiled-templates/balloon-enemy.tx" x="176" y="192"/>
-  <object id="48" template="../tiled-templates/balloon-enemy.tx" x="16" y="112"/>
-  <object id="49" template="../tiled-templates/balloon-enemy.tx" x="112" y="96"/>
-  <object id="50" template="../tiled-templates/balloon-enemy.tx" x="240" y="64"/>
   <object id="51" template="../tiled-templates/destructable-wall.tx" x="304" y="160"/>
   <object id="52" template="../tiled-templates/destructable-wall.tx" x="256" y="32"/>
   <object id="53" template="../tiled-templates/destructable-wall.tx" x="16" y="144"/>
   <object id="54" template="../tiled-templates/destructable-wall.tx" x="48" y="160"/>
+  <object id="61" gid="369" x="16" y="80" width="16" height="16"/>
+  <object id="62" gid="369" x="272" y="176" width="16" height="16"/>
+  <object id="63" gid="369" x="304" y="80" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="6" name="Enemies">
   <object id="19" template="../tiled-templates/balloon-enemy.tx" type="balloon-enemy" x="80" y="64"/>
   <object id="24" template="../tiled-templates/balloon-enemy.tx" x="80" y="160"/>
+  <object id="44" template="../tiled-templates/balloon-enemy.tx" x="176" y="64"/>
+  <object id="46" template="../tiled-templates/balloon-enemy.tx" x="256" y="128"/>
+  <object id="47" template="../tiled-templates/balloon-enemy.tx" x="176" y="192"/>
+  <object id="48" template="../tiled-templates/balloon-enemy.tx" x="16" y="112"/>
+  <object id="50" template="../tiled-templates/balloon-enemy.tx" x="240" y="64"/>
+ </objectgroup>
+ <objectgroup id="7" name="Upgrades">
+  <object id="57" gid="519" x="288" y="192" width="16" height="16"/>
+  <object id="58" gid="519" x="304" y="48" width="16" height="16"/>
+  <object id="59" gid="519" x="16" y="48" width="16" height="16"/>
+  <object id="60" gid="519" x="16" y="160" width="16" height="16"/>
  </objectgroup>
 </map>
