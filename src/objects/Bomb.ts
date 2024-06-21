@@ -8,6 +8,7 @@ import {
 } from "excalibur";
 import { spriteSheet } from "../resources.ts";
 import Explosion from "./Explosion.ts";
+import inventoryManager from "../InventoryManager.ts";
 
 export default class Bomb extends Actor {
   static snapToGrid({ x, y }: Required<Pick<ActorArgs, "x" | "y">>): Bomb {
@@ -50,7 +51,7 @@ export default class Bomb extends Actor {
         const explosion = new Explosion({
           x: this.pos.x,
           y: this.pos.y,
-          maxLength: 2,
+          maxLength: inventoryManager.laneLength,
         });
         engine.add(explosion);
         this.kill();
