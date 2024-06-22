@@ -3,6 +3,7 @@ import {
   ActorArgs,
   CollisionType,
   Engine,
+  PolygonCollider,
   randomInRange,
   Shape,
   Sound,
@@ -64,6 +65,17 @@ const EXPLOSION_LANE_SPRITE_MAP: {
   ],
 };
 
+function getExplosionCollider(direction: Direction): PolygonCollider | never {
+  switch (direction) {
+    case "left":
+    case "right":
+      return Shape.Box(16, 8);
+    case "buttom":
+    case "top":
+      return Shape.Box(8, 16);
+  }
+}
+
 class ExplosionLane extends Actor {
   #direction: Direction;
 
@@ -74,7 +86,7 @@ class ExplosionLane extends Actor {
       name: "explosion",
       x: x,
       y: y,
-      collider: Shape.Box(16, 16),
+      collider: getExplosionCollider(direction),
       collisionType: CollisionType.Passive,
     });
     this.#direction = direction;
@@ -124,10 +136,10 @@ const EXPLOSION_END_SPRITE_MAP: {
 const EXPLOSION_END_COLLIDER_VECTORS: {
   [key in Direction]: Vector[];
 } = {
-  top: [vec(-8, 8), vec(-8, 0), vec(8, 0), vec(8, 8)],
-  right: [vec(-8, -8), vec(0, -8), vec(0, 8), vec(-8, 8)],
-  buttom: [vec(-8, -8), vec(8, -8), vec(8, 0), vec(-8, 0)],
-  left: [vec(8, 8), vec(0, 8), vec(0, -8), vec(8, -8)],
+  top: [vec(-4, 8), vec(-4, 0), vec(4, 0), vec(4, 8)],
+  right: [vec(-8, -4), vec(0, -4), vec(0, 4), vec(-8, 4)],
+  buttom: [vec(-4, -8), vec(4, -8), vec(4, 0), vec(-4, 0)],
+  left: [vec(8, 4), vec(0, 4), vec(0, -4), vec(8, -4)],
 };
 
 class ExplosionEnd extends Actor {
