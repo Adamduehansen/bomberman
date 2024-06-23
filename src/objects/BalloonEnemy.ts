@@ -124,13 +124,13 @@ export default class BalloonEnemy extends Actor {
     if (this.#isAtDestination()) {
       this.#stopMovement();
       const newDestination = this.#getNewDestination();
-      const destructableWalls = engine.currentScene.actors.filter((actor) =>
-        actor.name === "Destructable Wall"
+      const nonCollidableObjects = engine.currentScene.actors.filter((actor) =>
+        actor.name === "Destructable Wall" || actor.name === "bomb"
       );
 
       if (
         map.isWallAt(newDestination.x, newDestination.y) ||
-        destructableWalls.some((wall) =>
+        nonCollidableObjects.some((wall) =>
           wall.pos.x === newDestination.x && wall.pos.y === newDestination.y
         )
       ) {

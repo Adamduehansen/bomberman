@@ -24,6 +24,13 @@ export default class Bomb extends Actor {
     });
   }
 
+  constructor(args: ActorArgs) {
+    super({
+      ...args,
+      name: "bomb",
+    });
+  }
+
   onInitialize(engine: Engine): void {
     this.graphics.use(
       new Animation({
