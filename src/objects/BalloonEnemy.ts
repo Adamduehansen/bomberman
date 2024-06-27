@@ -160,6 +160,7 @@ export default class BalloonEnemy extends Actor {
   onCollisionStart(_self: Collider, other: Collider): void {
     if (other.owner.name === "explosion") {
       this.#disableControls = true;
+      this.collider.clear();
       this.graphics.use("die");
       Resources.balloonExplode.play();
     }
