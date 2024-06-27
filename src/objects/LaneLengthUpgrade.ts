@@ -1,5 +1,5 @@
 import { Actor, ActorArgs, Collider, CollisionType, Shape } from "excalibur";
-import { spriteSheet } from "../resources.ts";
+import { Resources, spriteSheet } from "../resources.ts";
 import inventoryManager from "../InventoryManager.ts";
 
 export default class LaneLengthUpgrade extends Actor {
@@ -18,6 +18,7 @@ export default class LaneLengthUpgrade extends Actor {
 
   onCollisionStart(_self: Collider, other: Collider): void {
     if (other.owner.name === "Player") {
+      Resources.upgrade.play(0.5);
       inventoryManager.upgradeLaneLength();
     }
     this.kill();
