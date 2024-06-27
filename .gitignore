@@ -25,3 +25,4 @@ dist-ssr
 *.sw?
 *.tiled-session
 TODO
+.DS_Store
