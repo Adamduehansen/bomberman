@@ -3,6 +3,8 @@ import map from "../Map.ts";
 import Player from "../objects/Player.ts";
 
 export default class GameScene extends Scene {
+  #countdownTime = 100;
+
   onInitialize(engine: Engine): void {
     const spawnPoints = map.tiledMap.getObjectsByClassName("spawn-point");
     const spawnPointIndex = Math.floor(randomInRange(0, spawnPoints.length));
@@ -30,11 +32,22 @@ export default class GameScene extends Scene {
     const countdownTimer = new Timer({
       interval: 1000,
       repeats: true,
-      fcn: () => {
-        console.log("Counting down to the end!");
-      },
+      fcn: this.#updateCountdown.bind(this),
     });
-    countdownTimer.start();
     engine.addTimer(countdownTimer);
+
+    this.#updateTimerUi();
+
+    countdownTimer.start();
+  }
+
+  #updateCountdown(): void {
+    this.#countdownTime -= 1;
+    this.#updateTimerUi();
+  }
+
+  #updateTimerUi() {
+    document.querySelector(".countdown")!.textContent =
+      `Timer ${this.#countdownTime}`;
   }
 }
