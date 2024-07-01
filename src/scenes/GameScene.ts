@@ -3,7 +3,8 @@ import map from "../Map.ts";
 import Player from "../objects/Player.ts";
 
 export default class GameScene extends Scene {
-  #countdownTime = 100;
+  #countdownTime = 2;
+  #countdownTimer!: Timer;
 
   onInitialize(engine: Engine): void {
     const spawnPoints = map.tiledMap.getObjectsByClassName("spawn-point");
@@ -29,19 +30,24 @@ export default class GameScene extends Scene {
     engine.currentScene.camera.y = 208 / 2;
     engine.currentScene.camera.zoom = 3;
 
-    const countdownTimer = new Timer({
+    this.#countdownTimer = new Timer({
       interval: 1000,
       repeats: true,
       fcn: this.#updateCountdown.bind(this),
     });
-    engine.addTimer(countdownTimer);
+    engine.addTimer(this.#countdownTimer);
 
     this.#updateTimerUi();
 
-    countdownTimer.start();
+    this.#countdownTimer.start();
   }
 
   #updateCountdown(): void {
+    if (this.#countdownTime <= 0) {
+      this.engine.removeTimer(this.#countdownTimer);
+      return;
+    }
+
     this.#countdownTime -= 1;
     this.#updateTimerUi();
   }
