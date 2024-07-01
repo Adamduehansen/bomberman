@@ -1,6 +1,7 @@
-import { Engine, Keys, randomInRange, Scene, Timer } from "excalibur";
+import { Actor, Engine, Keys, randomInRange, Scene, Timer } from "excalibur";
 import map from "../Map.ts";
 import Player from "../objects/Player.ts";
+import { spriteSheet } from "../resources.ts";
 
 export default class GameScene extends Scene {
   #countdownTime = 2;
@@ -40,6 +41,8 @@ export default class GameScene extends Scene {
     this.#updateTimerUi();
 
     this.#countdownTimer.start();
+
+    this.#runEndscreen();
   }
 
   #updateCountdown(): void {
@@ -55,5 +58,29 @@ export default class GameScene extends Scene {
   #updateTimerUi() {
     document.querySelector(".countdown")!.textContent =
       `Timer ${this.#countdownTime}`;
+  }
+
+  #runEndscreen() {
+    let column = 16;
+    const timer = new Timer({
+      interval: 500,
+      fcn: () => {
+        const timerWall = new Actor({
+          width: 16,
+          height: 16,
+          x: column + 8,
+          y: 16 + 8,
+          z: 20,
+        });
+        timerWall.graphics.use(spriteSheet.getSprite(3, 3));
+        this.engine.add(timerWall);
+        column += 16;
+      },
+      repeats: true,
+    });
+
+    this.engine.addTimer(timer);
+
+    timer.start();
   }
 }
