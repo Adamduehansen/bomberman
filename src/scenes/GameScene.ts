@@ -1,10 +1,10 @@
-import { Actor, Engine, Keys, randomInRange, Scene, Timer } from "excalibur";
+import { Engine, Keys, randomInRange, Scene, Timer } from "excalibur";
 import map from "../Map.ts";
 import Player from "../objects/Player.ts";
-import { spriteSheet } from "../resources.ts";
+
+import { decreaseTimeLeft, store } from "../store.ts";
 
 export default class GameScene extends Scene {
-  #countdownTime = 2;
   #countdownTimer!: Timer;
 
   onInitialize(engine: Engine): void {
@@ -41,46 +41,15 @@ export default class GameScene extends Scene {
     this.#updateTimerUi();
 
     this.#countdownTimer.start();
-
-    this.#runEndscreen();
   }
 
   #updateCountdown(): void {
-    if (this.#countdownTime <= 0) {
-      this.engine.removeTimer(this.#countdownTimer);
-      return;
-    }
-
-    this.#countdownTime -= 1;
+    store.dispatch(decreaseTimeLeft());
     this.#updateTimerUi();
   }
 
   #updateTimerUi() {
-    document.querySelector(".countdown")!.textContent =
-      `Timer ${this.#countdownTime}`;
-  }
-
-  #runEndscreen() {
-    let column = 16;
-    const timer = new Timer({
-      interval: 500,
-      fcn: () => {
-        const timerWall = new Actor({
-          width: 16,
-          height: 16,
-          x: column + 8,
-          y: 16 + 8,
-          z: 20,
-        });
-        timerWall.graphics.use(spriteSheet.getSprite(3, 3));
-        this.engine.add(timerWall);
-        column += 16;
-      },
-      repeats: true,
-    });
-
-    this.engine.addTimer(timer);
-
-    timer.start();
+    const { timeLeft } = store.getState().timer;
+    document.querySelector(".countdown")!.textContent = `Timer ${timeLeft}`;
   }
 }
