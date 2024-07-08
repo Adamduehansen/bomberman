@@ -13,6 +13,7 @@ import {
 } from "excalibur";
 import { Resources, spriteSheet } from "../resources.ts";
 import map from "../Map.ts";
+import Points from "./Points.ts";
 
 const dieAnimationFrames: FromSpriteSheetOptions["frameCoordinates"] = [
   {
@@ -163,6 +164,11 @@ export default class BalloonEnemy extends Actor {
       this.collider.clear();
       this.graphics.use("die");
       Resources.balloonExplode.play();
+      const points = new Points({
+        x: this.pos.x,
+        y: this.pos.y,
+      });
+      this.scene?.engine.add(points);
     }
   }
 
