@@ -39,6 +39,7 @@ export default class GameScene extends Scene {
     engine.addTimer(this.#countdownTimer);
 
     this.#updateTimerUi();
+    this.#updateScoreUi();
 
     this.#countdownTimer.start();
   }
@@ -51,5 +52,10 @@ export default class GameScene extends Scene {
   #updateTimerUi() {
     const { timeLeft } = store.getState().timer;
     document.querySelector(".countdown")!.textContent = `Timer ${timeLeft}`;
+  }
+
+  #updateScoreUi() {
+    const { score } = store.getState().score;
+    document.querySelector(".countdown")!.textContent = `Score: ${score}`;
   }
 }

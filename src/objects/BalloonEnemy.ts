@@ -14,6 +14,7 @@ import {
 import { Resources, spriteSheet } from "../resources.ts";
 import map from "../Map.ts";
 import Points from "./Points.ts";
+import { addToScore, store } from "../store.ts";
 
 const dieAnimationFrames: FromSpriteSheetOptions["frameCoordinates"] = [
   {
@@ -169,6 +170,7 @@ export default class BalloonEnemy extends Actor {
         y: this.pos.y,
       });
       this.scene?.engine.add(points);
+      store.dispatch(addToScore(100));
     }
   }
 
