@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "imports": {
     "@excaliburjs/plugin-tiled": "npm:@excaliburjs/plugin-tiled",
-    "excalibur": "npm:excalibur",
-    "@reduxjs/toolkit": "https://esm.sh/@reduxjs/toolkit@2.2.6"
+    "excalibur": "npm:excalibur"
   },
   "tasks": {
     "dev": "deno run -A --node-modules-dir npm:vite",

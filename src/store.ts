@@ -1,4 +1,8 @@
-import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  configureStore,
+  createSlice,
+  PayloadAction,
+} from "https://esm.sh/@reduxjs/toolkit@2.2.6";
 
 interface TimerState {
   timeLeft: number;
