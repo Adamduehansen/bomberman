@@ -49,6 +49,7 @@ export default class BalloonEnemy extends Actor {
   #destination: Destination;
 
   #disableControls: boolean = false;
+  #hasDispatchedPoints: boolean = false;
 
   constructor(args: ActorArgs) {
     super({
@@ -169,8 +170,13 @@ export default class BalloonEnemy extends Actor {
         x: this.pos.x,
         y: this.pos.y,
       });
+      if (this.#hasDispatchedPoints === false) {
+        // this check is to ensure that if the enemy collides with multiple
+        // explosions it only dispatches one score action.
+        store.dispatch(addToScore(100));
+        this.#hasDispatchedPoints = true;
+      }
       this.scene?.engine.add(points);
-      store.dispatch(addToScore(100));
     }
   }
 
