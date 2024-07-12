@@ -3,6 +3,7 @@
   "packages": {
     "specifiers": {
       "npm:@excaliburjs/plugin-tiled": "npm:@excaliburjs/plugin-tiled@0.29.2_excalibur@0.29.3",
+      "npm:@types/node": "npm:@types/node@18.16.19",
       "npm:excalibur": "npm:excalibur@0.29.3",
       "npm:vite": "npm:vite@5.2.11"
     },
@@ -185,6 +186,10 @@
       },
       "@types/estree@1.0.5": {
         "integrity": "sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==",
+        "dependencies": {}
+      },
+      "@types/node@18.16.19": {
+        "integrity": "sha512-IXl7o+R9iti9eBW4Wg2hx1xQDig183jj7YLn8F7udNceyfkbn1ZxmzZXuak20gR40D7pIkIY1kYGx5VIGbaHKA==",
         "dependencies": {}
       },
       "agent-base@7.1.1": {
@@ -560,7 +565,16 @@
       }
     }
   },
-  "remote": {},
+  "remote": {
+    "https://esm.sh/@reduxjs/toolkit@2.2.6": "3e3ce712c73a6e3e8894b35f44590bd6bd63ae8bf09cfcd2b98c9bd2326f2316",
+    "https://esm.sh/v135/@reduxjs/toolkit@2.2.6/denonext/dist/uncheckedindexed.js": "8973827ae948587d97a9df15a8bceb536bb71bb24bf03361a0c22e25e208d828",
+    "https://esm.sh/v135/@reduxjs/toolkit@2.2.6/denonext/toolkit.mjs": "d406d85a88d9f6b5d9e00c2427630728a2bd54246eb76a711ba15e98dc185838",
+    "https://esm.sh/v135/@reduxjs/toolkit@2.2.6/dist/uncheckedindexed": "81977991ca0e83dab9b470afa84dec82ad254b2ce97a6f1ab4d6deac6004fd74",
+    "https://esm.sh/v135/immer@10.1.1/denonext/immer.mjs": "c9720da0ba7a521aa46a694a69f3a6089b4f99823890263ddce76b20d5c4a7da",
+    "https://esm.sh/v135/redux-thunk@3.1.0/denonext/redux-thunk.mjs": "2cd65bf34d92c6ddb7e8ea0e4e19354ba03c356d6c3fa2d290ddc4a2567fd48c",
+    "https://esm.sh/v135/redux@5.0.1/denonext/redux.mjs": "d3c79dc28f91aea20e12990414ee5ca08c613ed9a310e88b0ed14f6091e8bc22",
+    "https://esm.sh/v135/reselect@5.1.1/denonext/reselect.mjs": "c4867b681ea699e337422ad118c5a6524e4fbef5cb0ad3b8e7422585abdfbefc"
+  },
   "workspace": {
     "dependencies": [
       "npm:@excaliburjs/plugin-tiled",

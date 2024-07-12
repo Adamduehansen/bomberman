@@ -42,6 +42,10 @@ export default class GameScene extends Scene {
     this.#updateScoreUi();
 
     this.#countdownTimer.start();
+
+    store.subscribe(() => {
+      this.#updateScoreUi();
+    });
   }
 
   #updateCountdown(): void {
@@ -56,6 +60,8 @@ export default class GameScene extends Scene {
 
   #updateScoreUi() {
     const { score } = store.getState().score;
-    document.querySelector(".countdown")!.textContent = `Score: ${score}`;
+    console.log(score);
+
+    document.querySelector(".score")!.textContent = `Score: ${score}`;
   }
 }
