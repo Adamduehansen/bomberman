@@ -60,8 +60,6 @@ export default class GameScene extends Scene {
 
   #updateScoreUi() {
     const { score } = store.getState().score;
-    console.log(score);
-
     document.querySelector(".score")!.textContent = `Score: ${score}`;
   }
 }
