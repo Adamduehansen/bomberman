@@ -3,6 +3,7 @@
   "packages": {
     "specifiers": {
       "npm:@excaliburjs/plugin-tiled": "npm:@excaliburjs/plugin-tiled@0.29.2_excalibur@0.29.3",
+      "npm:@reduxjs/toolkit@2.2.6": "npm:@reduxjs/toolkit@2.2.6_redux@5.0.1",
       "npm:@types/node": "npm:@types/node@18.16.19",
       "npm:excalibur": "npm:excalibur@0.29.3",
       "npm:vite": "npm:vite@5.2.11"
@@ -118,6 +119,15 @@
           "pako": "pako@1.0.11",
           "zod": "zod@3.22.4",
           "zstddec": "zstddec@0.1.0"
+        }
+      },
+      "@reduxjs/toolkit@2.2.6_redux@5.0.1": {
+        "integrity": "sha512-kH0r495c5z1t0g796eDQAkYbEQ3a1OLYN9o8jQQVZyKyw367pfRGS+qZLkHYvFHiUUdafpoSlQ2QYObIApjPWA==",
+        "dependencies": {
+          "immer": "immer@10.1.1",
+          "redux": "redux@5.0.1",
+          "redux-thunk": "redux-thunk@3.1.0_redux@5.0.1",
+          "reselect": "reselect@5.1.1"
         }
       },
       "@rollup/rollup-android-arm-eabi@4.18.0": {
@@ -338,6 +348,10 @@
           "safer-buffer": "safer-buffer@2.1.2"
         }
       },
+      "immer@10.1.1": {
+        "integrity": "sha512-s2MPrmjovJcoMaHtx6K11Ra7oD05NT97w1IC5zpMkT6Atjr7H8LjaDd81iIxUYpMKSRRNMJE703M1Fhr/TctHw==",
+        "dependencies": {}
+      },
       "is-potential-custom-element-name@1.0.1": {
         "integrity": "sha512-bCYeRA2rVibKZd+s2625gGnGF/t7DSqDs4dP7CrLA1m7jKWz6pps0LpYLJN8Q64HtmPKJ1hrN3nzPNKFEKOUiQ==",
         "dependencies": {}
@@ -424,12 +438,26 @@
         "integrity": "sha512-FIqgj2EUvTa7R50u0rGsyTftzjYmv/a3hO345bZNrqabNqjtgiDMgmo4mkUjd+nzU5oF3dClKqFIPUKybUyqoQ==",
         "dependencies": {}
       },
+      "redux-thunk@3.1.0_redux@5.0.1": {
+        "integrity": "sha512-NW2r5T6ksUKXCabzhL9z+h206HQw/NJkcLm1GPImRQ8IzfXwRGqjVhKJGauHirT0DAuyy6hjdnMZaRoAcy0Klw==",
+        "dependencies": {
+          "redux": "redux@5.0.1"
+        }
+      },
+      "redux@5.0.1": {
+        "integrity": "sha512-M9/ELqF6fy8FwmkpnF0S3YKOqMyoWJ4+CS5Efg2ct3oY9daQvd/Pc71FpGZsVsbl3Cpb+IIcjBDUnnyBdQbq4w==",
+        "dependencies": {}
+      },
       "require-from-string@2.0.2": {
         "integrity": "sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==",
         "dependencies": {}
       },
       "requires-port@1.0.0": {
         "integrity": "sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==",
+        "dependencies": {}
+      },
+      "reselect@5.1.1": {
+        "integrity": "sha512-K/BG6eIky/SBpzfHZv/dd+9JBFiS4SWV7FIujVyJRux6e45+73RaUHXLmIR1f7WOMaQ0U1km6qwklRQxpJJY0w==",
         "dependencies": {}
       },
       "rollup@4.18.0": {
@@ -578,6 +606,7 @@
   "workspace": {
     "dependencies": [
       "npm:@excaliburjs/plugin-tiled",
+      "npm:@reduxjs/toolkit@2.2.6",
       "npm:excalibur"
     ]
   }
