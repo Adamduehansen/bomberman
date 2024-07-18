@@ -43,6 +43,7 @@ export default class DestructableWall extends Actor {
   onCollisionStart(_self: Collider, other: Collider): void {
     if (other.owner.name === "explosion") {
       this.graphics.use("destroying");
+      this.scene?.camera.shake(5, 5, 500);
     }
   }
 }
