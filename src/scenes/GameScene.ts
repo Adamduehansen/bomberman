@@ -24,12 +24,12 @@ export default class GameScene extends Scene {
       },
     });
     this.engine.add(this.player);
+    this.camera.x = this.player.pos.x;
+    this.camera.y = this.player.pos.y;
+    this.camera.strategy.elasticToActor(this.player, .2, .8);
+    this.camera.zoom = 4;
 
     map.tiledMap.addToScene(this);
-
-    this.engine.currentScene.camera.x = 336 / 2;
-    this.engine.currentScene.camera.y = 208 / 2;
-    this.engine.currentScene.camera.zoom = 3;
 
     this.#countdownTimer = new Timer({
       interval: 1000,
