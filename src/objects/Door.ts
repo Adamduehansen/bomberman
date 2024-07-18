@@ -7,7 +7,7 @@ export default class Door extends Actor {
       ...args,
       name: "door",
       collisionType: CollisionType.Passive,
-      collider: Shape.Box(1, 16),
+      collider: Shape.Box(1, 1),
     });
   }
 
