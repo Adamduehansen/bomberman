@@ -8,7 +8,6 @@ import {
   Engine,
   Keys,
   range,
-  Scene,
   Shape,
   Vector,
 } from "excalibur";
@@ -47,7 +46,7 @@ export default class Player extends Actor {
     this.#controls = controls;
   }
 
-  onInitialize(): void {
+  onInitialize(engine: Engine): void {
     this.graphics.add("idle", spriteSheet.getSprite(4, 0));
     this.graphics.add(
       "walk-down",
@@ -93,6 +92,7 @@ export default class Player extends Actor {
     );
     dieAnimation.events.on("end", () => {
       this.kill();
+      SceneManager.goToScene(engine, "gameoverscene");
     });
     this.graphics.add(
       "die",
@@ -148,10 +148,6 @@ export default class Player extends Actor {
       Resources.door.play(.5);
       SceneManager.goToScene(this.scene!.engine, "gameoverscene");
     }
-  }
-
-  onPostKill(scene: Scene): void {
-    SceneManager.goToScene(scene.engine, "gameoverscene");
   }
 
   #stopMovement(): void {

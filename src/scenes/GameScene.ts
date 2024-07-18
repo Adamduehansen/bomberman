@@ -1,18 +1,18 @@
-import { Engine, Keys, randomInRange, Scene, Timer } from "excalibur";
+import { Keys, randomInRange, Scene, Timer } from "excalibur";
 import map from "../Map.ts";
 import Player from "../objects/Player.ts";
-
 import { decreaseTimeLeft, store } from "../store.ts";
 
 export default class GameScene extends Scene {
   #countdownTimer!: Timer;
+  player?: Player;
 
-  onInitialize(engine: Engine): void {
+  onActivate(): void {
     const spawnPoints = map.tiledMap.getObjectsByClassName("spawn-point");
     const spawnPointIndex = Math.floor(randomInRange(0, spawnPoints.length));
 
     const player1SpawnPoint = spawnPoints[spawnPointIndex];
-    const player1 = new Player({
+    this.player = new Player({
       x: player1SpawnPoint.x,
       y: player1SpawnPoint.y,
       controls: {
@@ -23,20 +23,20 @@ export default class GameScene extends Scene {
         placeBomb: Keys.Space,
       },
     });
-    engine.add(player1);
+    this.engine.add(this.player);
 
     map.tiledMap.addToScene(this);
 
-    engine.currentScene.camera.x = 336 / 2;
-    engine.currentScene.camera.y = 208 / 2;
-    engine.currentScene.camera.zoom = 3;
+    this.engine.currentScene.camera.x = 336 / 2;
+    this.engine.currentScene.camera.y = 208 / 2;
+    this.engine.currentScene.camera.zoom = 3;
 
     this.#countdownTimer = new Timer({
       interval: 1000,
       repeats: true,
       fcn: this.#updateCountdown.bind(this),
     });
-    engine.addTimer(this.#countdownTimer);
+    this.engine.addTimer(this.#countdownTimer);
 
     this.#updateTimerUi();
     this.#updateScoreUi();
@@ -46,6 +46,10 @@ export default class GameScene extends Scene {
     store.subscribe(() => {
       this.#updateScoreUi();
     });
+  }
+
+  onDeactivate(): void {
+    this.player?.kill();
   }
 
   #updateCountdown(): void {
