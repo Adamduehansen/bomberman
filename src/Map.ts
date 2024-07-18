@@ -3,6 +3,7 @@ import { vec } from "excalibur";
 import DestructableWall from "./objects/DestructableWall.ts";
 import BalloonEnemy from "./objects/BalloonEnemy.ts";
 import LaneLengthUpgrade from "./objects/LaneLengthUpgrade.ts";
+import Door from "./objects/Door.ts";
 
 class Map {
   tiledMap: TiledResource;
@@ -24,6 +25,12 @@ class Map {
         },
         "lane-length-upgrade": function (props) {
           return new LaneLengthUpgrade({
+            x: props.worldPos.x + 8,
+            y: props.worldPos.y - 8,
+          });
+        },
+        "door": function (props) {
+          return new Door({
             x: props.worldPos.x + 8,
             y: props.worldPos.y - 8,
           });

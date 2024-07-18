@@ -11,6 +11,7 @@ export const Resources = {
   death: new Sound("sounds/death.wav"),
   balloonExplode: new Sound("sounds/balloon-explode.wav"),
   upgrade: new Sound("sounds/upgrade.wav"),
+  door: new Sound("sounds/door.wav"),
 } as const;
 
 export const loader = new Loader([map.tiledMap]);

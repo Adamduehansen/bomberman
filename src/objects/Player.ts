@@ -134,15 +134,24 @@ export default class Player extends Actor {
   }
 
   onCollisionStart(_self: Collider, other: Collider): void {
-    if (other.owner.name === "explosion" || other.owner.name === "balloon") {
+    const { name: otherName } = other.owner;
+
+    if (otherName === "explosion" || otherName === "balloon") {
       this.#disableControls = true;
       this.graphics.use("die");
       Resources.death.play(0.15);
     }
+
+    if (otherName === "door") {
+      this.#disableControls = true;
+      this.graphics.use("idle");
+      Resources.door.play(.5);
+      SceneManager.goToScene(this.scene!.engine, "gameoverscene");
+    }
   }
 
   onPostKill(scene: Scene): void {
-    SceneManager.goToScene(scene.engine, "gamescene");
+    SceneManager.goToScene(scene.engine, "gameoverscene");
   }
 
   #stopMovement(): void {
