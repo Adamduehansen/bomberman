@@ -128,7 +128,8 @@ export default class BalloonEnemy extends Actor {
       this.#stopMovement();
       const newDestination = this.#getNewDestination();
       const nonCollidableObjects = engine.currentScene.actors.filter((actor) =>
-        actor.name === "Destructable Wall" || actor.name === "bomb"
+        actor.name === "Destructable Wall" || actor.name === "bomb" ||
+        actor.name === "door"
       );
 
       if (
