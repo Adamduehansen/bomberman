@@ -26,6 +26,7 @@ export default class GameOverScene extends Scene {
     restartButton.onclick = () => {
       SceneManager.goToScene(this.engine, "gamescene");
     };
+    restartButton.setAttribute("autofocus", "");
     this.container.append(restartButton);
 
     document.body.append(this.container);
