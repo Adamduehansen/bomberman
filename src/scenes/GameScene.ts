@@ -24,10 +24,11 @@ export default class GameScene extends Scene {
       },
     });
     this.engine.add(this.player);
-    this.camera.x = this.player.pos.x;
-    this.camera.y = this.player.pos.y;
+    this.camera.pos = this.player.pos;
     this.camera.strategy.elasticToActor(this.player, .2, .8);
     this.camera.zoom = 4;
+    console.log(this.camera.pos);
+    console.log(this.player.pos);
 
     map.tiledMap.addToScene(this);
 
@@ -50,6 +51,8 @@ export default class GameScene extends Scene {
 
   onDeactivate(): void {
     this.player?.kill();
+    this.player = undefined;
+    this.camera.clearAllStrategies();
   }
 
   #updateCountdown(): void {
