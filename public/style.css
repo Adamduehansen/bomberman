@@ -2,6 +2,7 @@
 
 .countdown, .score {
   position: absolute;
+  color: white;
 }
 
 .score {
