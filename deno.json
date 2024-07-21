@@ -3,7 +3,7 @@
   "imports": {
     "@excaliburjs/plugin-tiled": "npm:@excaliburjs/plugin-tiled",
     "excalibur": "npm:excalibur",
-    "@reduxjs/toolkit": "npm:@reduxjs/toolkit@2.2.6"
+    "@reduxjs/toolkit": "https://esm.sh/@reduxjs/toolkit@2.2.6"
   },
   "tasks": {
     "dev": "deno run -A --node-modules-dir npm:vite",
@@ -12,9 +12,6 @@
     "serve": "deno run --allow-net --allow-read https://deno.land/std@0.157.0/http/file_server.ts dist/"
   },
   "compilerOptions": {
-    "lib": [
-      "deno.window",
-      "DOM"
-    ]
+    "lib": ["deno.window", "DOM"]
   }
 }
