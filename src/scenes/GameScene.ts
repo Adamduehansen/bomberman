@@ -25,10 +25,8 @@ export default class GameScene extends Scene {
     });
     this.engine.add(this.player);
     this.camera.pos = this.player.pos;
-    this.camera.strategy.elasticToActor(this.player, .2, .8);
+    this.camera.strategy.lockToActor(this.player);
     this.camera.zoom = 4;
-    console.log(this.camera.pos);
-    console.log(this.player.pos);
 
     map.tiledMap.addToScene(this);
 
