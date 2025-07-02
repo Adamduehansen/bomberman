@@ -1,20 +1,18 @@
-import { Color, DisplayMode, Engine } from "excalibur";
+import * as ex from "excalibur";
 import { loader } from "./resources.ts";
 import GameScene from "./scenes/GameScene.ts";
-import GameOverScene from "./scenes/GameOverScene.ts";
 
-const game = new Engine({
+const game = new ex.Engine({
   suppressPlayButton: true,
   pixelArt: true,
   width: 336,
   height: 208,
-  displayMode: DisplayMode.FillScreen,
+  displayMode: ex.DisplayMode.FillScreen,
   maxFps: 60,
-  backgroundColor: Color.Black,
+  backgroundColor: ex.Color.Black,
 });
 
 game.addScene("gamescene", new GameScene());
-game.addScene("gameoverscene", new GameOverScene());
 
 game.start(loader).then(() => {
   game.goToScene("gamescene");

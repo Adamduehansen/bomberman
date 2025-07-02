@@ -1,17 +1,15 @@
 {
-  "version": "0.1.0",
   "imports": {
     "@excaliburjs/plugin-tiled": "npm:@excaliburjs/plugin-tiled",
     "excalibur": "npm:excalibur",
-    "@reduxjs/toolkit": "https://esm.sh/@reduxjs/toolkit@2.2.6"
+    "vite": "npm:vite@^7.0.0"
   },
   "tasks": {
-    "dev": "deno run -A --node-modules-dir npm:vite",
-    "build": "deno run -A --node-modules-dir npm:vite build",
-    "preview": "deno run -A --node-modules-dir npm:vite preview",
-    "serve": "deno run --allow-net --allow-read https://deno.land/std@0.157.0/http/file_server.ts dist/"
+    "dev": "vite",
+    "build": "vite build"
   },
   "compilerOptions": {
     "lib": ["deno.window", "DOM"]
-  }
+  },
+  "nodeModulesDir": "auto"
 }

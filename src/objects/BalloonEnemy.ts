@@ -14,7 +14,6 @@ import {
 import { Resources, spriteSheet } from "../resources.ts";
 import map from "../Map.ts";
 import Points from "./Points.ts";
-import { addToScore, store } from "../store.ts";
 
 const dieAnimationFrames: FromSpriteSheetOptions["frameCoordinates"] = [
   {
@@ -62,7 +61,7 @@ export default class BalloonEnemy extends Actor {
     this.#destination = { x: this.pos.x, y: this.pos.y };
   }
 
-  onInitialize(): void {
+  override onInitialize(): void {
     const walkRightAnimation = Animation.fromSpriteSheetCoordinates({
       spriteSheet: spriteSheet,
       frameCoordinates: [
@@ -118,7 +117,7 @@ export default class BalloonEnemy extends Actor {
     this.graphics.use("look-right");
   }
 
-  onPreUpdate(engine: Engine): void {
+  override onPreUpdate(engine: Engine): void {
     if (this.#disableControls) {
       this.#stopMovement();
       return;
@@ -161,7 +160,7 @@ export default class BalloonEnemy extends Actor {
     }
   }
 
-  onCollisionStart(_self: Collider, other: Collider): void {
+  override onCollisionStart(_self: Collider, other: Collider): void {
     if (other.owner.name === "explosion") {
       this.#disableControls = true;
       this.collider.clear();
@@ -174,7 +173,6 @@ export default class BalloonEnemy extends Actor {
       if (this.#hasDispatchedPoints === false) {
         // this check is to ensure that if the enemy collides with multiple
         // explosions it only dispatches one score action.
-        store.dispatch(addToScore(100));
         this.#hasDispatchedPoints = true;
       }
       this.scene?.engine.add(points);

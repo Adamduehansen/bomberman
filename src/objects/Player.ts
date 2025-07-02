@@ -1,35 +1,23 @@
-import {
-  Actor,
-  ActorArgs,
-  Animation,
-  AnimationStrategy,
-  Collider,
-  CollisionType,
-  Engine,
-  Keys,
-  range,
-  Shape,
-  Vector,
-} from "excalibur";
+import * as ex from "excalibur";
 import { Resources, spriteSheet } from "../resources.ts";
 import Bomb from "./Bomb.ts";
 import SceneManager from "../SceneManager.ts";
 
 interface Controls {
-  up: Keys;
-  right: Keys;
-  down: Keys;
-  left: Keys;
-  placeBomb: Keys;
+  up: ex.Keys;
+  right: ex.Keys;
+  down: ex.Keys;
+  left: ex.Keys;
+  placeBomb: ex.Keys;
 }
 
-type PlayerArgs = Required<Pick<ActorArgs, "x" | "y">> & {
+type PlayerArgs = Required<Pick<ex.ActorArgs, "x" | "y">> & {
   controls: Controls;
 };
 
 const SPEED = 60;
 
-export default class Player extends Actor {
+export default class Player extends ex.Actor {
   #controls: Controls;
 
   #disableControls: boolean = false;
@@ -39,56 +27,56 @@ export default class Player extends Actor {
       x: x,
       y: y,
       name: "Player",
-      collider: Shape.Circle(8),
-      collisionType: CollisionType.Active,
+      collider: ex.Shape.Circle(8),
+      collisionType: ex.CollisionType.Active,
       z: 10,
     });
     this.#controls = controls;
   }
 
-  onInitialize(engine: Engine): void {
+  override onInitialize(engine: ex.Engine): void {
     this.graphics.add("idle", spriteSheet.getSprite(4, 0));
     this.graphics.add(
       "walk-down",
-      Animation.fromSpriteSheet(
+      ex.Animation.fromSpriteSheet(
         spriteSheet,
-        range(3, 5),
+        ex.range(3, 5),
         100,
-        AnimationStrategy.PingPong,
+        ex.AnimationStrategy.PingPong,
       ),
     );
     this.graphics.add(
       "walk-up",
-      Animation.fromSpriteSheet(
+      ex.Animation.fromSpriteSheet(
         spriteSheet,
-        range(19, 21),
+        ex.range(19, 21),
         100,
-        AnimationStrategy.PingPong,
+        ex.AnimationStrategy.PingPong,
       ),
     );
     this.graphics.add(
       "walk-left",
-      Animation.fromSpriteSheet(
+      ex.Animation.fromSpriteSheet(
         spriteSheet,
-        range(0, 2),
+        ex.range(0, 2),
         100,
-        AnimationStrategy.PingPong,
+        ex.AnimationStrategy.PingPong,
       ),
     );
     this.graphics.add(
       "walk-right",
-      Animation.fromSpriteSheet(
+      ex.Animation.fromSpriteSheet(
         spriteSheet,
-        range(16, 18),
+        ex.range(16, 18),
         100,
-        AnimationStrategy.PingPong,
+        ex.AnimationStrategy.PingPong,
       ),
     );
-    const dieAnimation = Animation.fromSpriteSheet(
+    const dieAnimation = ex.Animation.fromSpriteSheet(
       spriteSheet,
-      range(32, 38),
+      ex.range(32, 38),
       100,
-      AnimationStrategy.End,
+      ex.AnimationStrategy.End,
     );
     dieAnimation.events.on("end", () => {
       this.kill();
@@ -101,7 +89,7 @@ export default class Player extends Actor {
     this.graphics.use("idle");
   }
 
-  onPreUpdate(engine: Engine): void {
+  override onPreUpdate(engine: ex.Engine): void {
     if (this.#disableControls) {
       this.#stopMovement();
       return;
@@ -133,7 +121,7 @@ export default class Player extends Actor {
     }
   }
 
-  onCollisionStart(_self: Collider, other: Collider): void {
+  override onCollisionStart(_self: ex.Collider, other: ex.Collider): void {
     const { name: otherName } = other.owner;
 
     if (otherName === "explosion" || otherName === "balloon") {
@@ -151,6 +139,6 @@ export default class Player extends Actor {
   }
 
   #stopMovement(): void {
-    this.vel = Vector.Zero;
+    this.vel = ex.Vector.Zero;
   }
 }
