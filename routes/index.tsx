@@ -1,5 +1,12 @@
+import { useSignal } from "@preact/signals";
 import { define } from "../utils.ts";
+import SocketProvider from "../islands/socket-provider.tsx";
 
 export default define.page(function Home() {
-  return <div>Hello, Bomberman</div>;
+  const userId = useSignal<string>();
+  return (
+    <SocketProvider>
+      Hello, Bomberman!
+    </SocketProvider>
+  );
 });

@@ -25,6 +25,7 @@
     "npm:@preact/signals@^2.2.1": "2.2.1_preact@10.26.9",
     "npm:esbuild-wasm@~0.25.5": "0.25.5",
     "npm:esbuild@~0.25.5": "0.25.5",
+    "npm:excalibur@~0.30.3": "0.30.3",
     "npm:preact-render-to-string@^6.5.11": "6.5.13_preact@10.26.9",
     "npm:preact@^10.26.9": "10.26.9"
   },
@@ -292,6 +293,9 @@
       "scripts": true,
       "bin": true
     },
+    "excalibur@0.30.3": {
+      "integrity": "sha512-RUP3qQ6tFe9BJxvqh6p/I0B9rKMu+KGlHZruJyVOohiYUtCP0LsRgkVHxezvWtWsvCElVBL4PeCooE4KPlIldA=="
+    },
     "preact-render-to-string@6.5.13_preact@10.26.9": {
       "integrity": "sha512-iGPd+hKPMFKsfpR2vL4kJ6ZPcFIoWZEcBf0Dpm3zOpdVvj77aY8RlLiQji5OMrngEyaxGogeakTb54uS2FvA6w==",
       "dependencies": [
@@ -306,6 +310,7 @@
     "dependencies": [
       "jsr:@fresh/core@^2.0.0-alpha.37",
       "npm:@preact/signals@^2.2.1",
+      "npm:excalibur@~0.30.3",
       "npm:preact@^10.26.9"
     ]
   }
