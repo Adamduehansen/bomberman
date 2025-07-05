@@ -1,6 +1,8 @@
-import { ComponentChildren, JSX } from "preact";
+import { ComponentChildren, createContext, JSX } from "preact";
 import { useEffect } from "preact/hooks";
 import { useSignal } from "@preact/signals";
+
+export const SocketId = createContext<string | undefined>(undefined);
 
 interface Props {
   children: ComponentChildren;
@@ -42,8 +44,9 @@ export default function SocketProvider({ children }: Props): JSX.Element {
 
   return (
     <div>
-      <p>Socket ID: {socketId.value}</p>
-      {children}
+      <SocketId.Provider value={socketId.value}>
+        {children}
+      </SocketId.Provider>
     </div>
   );
 }
