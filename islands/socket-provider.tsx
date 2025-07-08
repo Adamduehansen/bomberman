@@ -18,7 +18,7 @@ interface Props {
 
 export default function SocketProvider({ children }: Props): JSX.Element {
   const socketId = useSignal<string>();
-  const otherPlayers = useSignal<string[]>([]);
+  const otherPlayers = useSignal<unknown[]>([]);
 
   useEffect(() => {
     const ws = new WebSocket("/ws");
@@ -34,6 +34,12 @@ export default function SocketProvider({ children }: Props): JSX.Element {
         case "CONNECTION_ACCEPTED": {
           socketId.value = data.socketId;
           otherPlayers.value = data.otherPlayers;
+          break;
+        }
+        case "NEW_CONNECTION": {
+          otherPlayers.value = [...otherPlayers.value, {
+            id: data.playerData.id,
+          }];
           break;
         }
         default: {

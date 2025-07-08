@@ -17,18 +17,34 @@ export const socket = define.middleware(({ req }) => {
     const socketId = crypto.randomUUID();
     console.log("Connection has been assigned", socketId);
     socketMap.set(socketId, ws);
-    const socketIdAndData = Object.entries(Object.fromEntries(socketMap)).map((
+    const otherPlayersData = Object.entries(Object.fromEntries(socketMap)).map((
       [id],
     ) => ({
       id: id,
     })).filter(({ id }) => id !== socketId);
 
+    // Send message to connected player...
     const connectionAcceptedData = {
       type: "CONNECTION_ACCEPTED",
       socketId: socketId,
-      otherPlayers: socketIdAndData,
+      otherPlayers: otherPlayersData,
     };
     ws.send(JSON.stringify(connectionAcceptedData));
+
+    // Send message to all connected players...
+    const newConnectionBroadcast = {
+      type: "NEW_CONNECTION",
+      playerData: {
+        id: socketId,
+      },
+    };
+
+    for (const [id, socket] of socketMap.entries()) {
+      if (id === socketId) {
+        continue;
+      }
+      socket.send(JSON.stringify(newConnectionBroadcast));
+    }
   });
 
   ws.addEventListener("message", ({ data }) => {

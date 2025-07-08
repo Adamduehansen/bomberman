@@ -8,8 +8,6 @@ interface PlayerListProps {
 
 function PlayerList({ players }: PlayerListProps): JSX.Element {
   if (players.length > 0) {
-    console.log(players);
-
     return (
       <ul>
         {players.map((player, index) => {
