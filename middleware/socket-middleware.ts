@@ -17,9 +17,16 @@ export const socket = define.middleware(({ req }) => {
     const socketId = crypto.randomUUID();
     console.log("Connection has been assigned", socketId);
     socketMap.set(socketId, ws);
+    const socketIdAndData = Object.entries(Object.fromEntries(socketMap)).map((
+      [id],
+    ) => ({
+      id: id,
+    })).filter(({ id }) => id !== socketId);
+
     const connectionAcceptedData = {
       type: "CONNECTION_ACCEPTED",
       socketId: socketId,
+      otherPlayers: socketIdAndData,
     };
     ws.send(JSON.stringify(connectionAcceptedData));
   });

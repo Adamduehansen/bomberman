@@ -2,7 +2,15 @@ import { ComponentChildren, createContext, JSX } from "preact";
 import { useEffect } from "preact/hooks";
 import { useSignal } from "@preact/signals";
 
-export const SocketId = createContext<string | undefined>(undefined);
+interface SocketDataProps {
+  id: string | undefined;
+  otherPlayers: unknown[];
+}
+
+export const SocketData = createContext<SocketDataProps>({
+  id: undefined,
+  otherPlayers: [],
+});
 
 interface Props {
   children: ComponentChildren;
@@ -10,6 +18,7 @@ interface Props {
 
 export default function SocketProvider({ children }: Props): JSX.Element {
   const socketId = useSignal<string>();
+  const otherPlayers = useSignal<string[]>([]);
 
   useEffect(() => {
     const ws = new WebSocket("/ws");
@@ -24,6 +33,7 @@ export default function SocketProvider({ children }: Props): JSX.Element {
       switch (data.type) {
         case "CONNECTION_ACCEPTED": {
           socketId.value = data.socketId;
+          otherPlayers.value = data.otherPlayers;
           break;
         }
         default: {
@@ -44,9 +54,14 @@ export default function SocketProvider({ children }: Props): JSX.Element {
 
   return (
     <div>
-      <SocketId.Provider value={socketId.value}>
+      <SocketData.Provider
+        value={{
+          id: socketId.value,
+          otherPlayers: otherPlayers.value,
+        }}
+      >
         {children}
-      </SocketId.Provider>
+      </SocketData.Provider>
     </div>
   );
 }
