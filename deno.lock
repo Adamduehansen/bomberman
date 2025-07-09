@@ -21,6 +21,7 @@
     "jsr:@std/path@^1.1.1": "1.1.1",
     "jsr:@std/semver@1": "1.0.5",
     "jsr:@std/uuid@^1.0.7": "1.0.9",
+    "jsr:@valibot/valibot@^1.1.0": "1.1.0",
     "npm:@opentelemetry/api@^1.9.0": "1.9.0",
     "npm:@preact/signals@^2.2.1": "2.2.1_preact@10.26.9",
     "npm:esbuild-wasm@~0.25.5": "0.25.5",
@@ -116,6 +117,9 @@
       "dependencies": [
         "jsr:@std/bytes"
       ]
+    },
+    "@valibot/valibot@1.1.0": {
+      "integrity": "2617f02b532011b8140926899d420a3e1bbb0fcb7cdf8e7b669df89e7edd7f5f"
     }
   },
   "npm": {
@@ -309,6 +313,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@fresh/core@^2.0.0-alpha.37",
+      "jsr:@valibot/valibot@^1.1.0",
       "npm:@preact/signals@^2.2.1",
       "npm:excalibur@~0.30.3",
       "npm:preact@^10.26.9"

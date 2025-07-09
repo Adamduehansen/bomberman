@@ -1,6 +1,8 @@
 import { ComponentChildren, createContext, JSX } from "preact";
 import { useEffect } from "preact/hooks";
 import { useSignal } from "@preact/signals";
+import * as v from "@valibot/valibot";
+import { MessageVariantsScheme } from "../message-types.ts";
 
 interface SocketDataProps {
   id: string | undefined;
@@ -27,23 +29,29 @@ export default function SocketProvider({ children }: Props): JSX.Element {
       console.log("Socket connection established!");
     });
 
-    ws.addEventListener("message", (event) => {
-      console.log("Socket message received:", event.data);
-      const data = JSON.parse(event.data);
-      switch (data.type) {
+    ws.addEventListener("message", ({ data }) => {
+      console.log("Socket message received:", data);
+
+      const { success, output, issues } = v.safeParse(
+        MessageVariantsScheme,
+        JSON.parse(data),
+      );
+      if (success === false) {
+        console.warn("Unhandled type", data);
+        console.warn(issues);
+        return;
+      }
+
+      switch (output.type) {
         case "CONNECTION_ACCEPTED": {
-          socketId.value = data.socketId;
-          otherPlayers.value = data.otherPlayers;
+          socketId.value = output.socketId;
+          otherPlayers.value = output.otherPlayers;
           break;
         }
         case "NEW_CONNECTION": {
           otherPlayers.value = [...otherPlayers.value, {
-            id: data.playerData.id,
+            id: output.playerData.id,
           }];
-          break;
-        }
-        default: {
-          console.log("Unhandled type", data.type);
           break;
         }
       }
