@@ -1,6 +1,7 @@
-import { useEffect } from "preact/hooks";
+import { useContext, useEffect } from "preact/hooks";
 import * as ex from "excalibur";
 import { JSX } from "preact";
+import { Socket } from "./socket-provider.tsx";
 
 interface PlayerArgs {
   pos: ex.Vector;
@@ -61,12 +62,32 @@ class Player extends ex.Actor {
   }
 }
 
-async function initGame(): Promise<void> {
+async function initGame(socket: WebSocket): Promise<void> {
+  let connected = false;
+
+  socket.addEventListener("open", () => {
+    console.log("Connection open from game!");
+    connected = true;
+  });
+
   const game = new ex.Engine({
     width: 800,
     height: 600,
     canvasElementId: "root",
   });
+
+  const connectStatus = new ex.Label({
+    pos: ex.vec(20, 20),
+    font: new ex.Font({
+      family: "impact",
+      size: 24,
+      unit: ex.FontUnit.Px,
+    }),
+  });
+  connectStatus.on("predraw", () => {
+    connectStatus.text = `Connection status: ${connected ? "🟢" : "🔴"}`;
+  });
+  game.add(connectStatus);
 
   const player = new Player({
     pos: ex.vec(100, 100),
@@ -78,8 +99,14 @@ async function initGame(): Promise<void> {
 }
 
 export default function GameDisplay(): JSX.Element {
+  const socket = useContext(Socket);
+
   useEffect(() => {
-    initGame();
-  }, []);
+    if (socket === undefined) {
+      return;
+    }
+
+    initGame(socket);
+  }, [socket]);
   return <canvas id="root"></canvas>;
 }
