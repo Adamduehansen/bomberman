@@ -1,6 +1,7 @@
 import {
   InitPlayerForPlayersData,
   ObsoleteConnectionData,
+  PlayerSetPosition,
   ServerMessageVariantsScheme,
 } from "../message-types.ts";
 import { define } from "../utils.ts";
@@ -87,7 +88,21 @@ export const socket = define.middleware(({ req }) => {
         }
         break;
       }
-      case "PLAYER_MOVE": {
+      case "PLAYER_POSITION": {
+        const { playerId, pos } = output;
+        for (const [id, socket] of socketMap.entries()) {
+          if (id === playerId) {
+            continue;
+          }
+
+          const data: PlayerSetPosition = {
+            type: "PLAYER_SET_POSITION",
+            playerId: playerId,
+            pos: pos,
+          };
+
+          socket.send(JSON.stringify(data));
+        }
         break;
       }
       case "INIT_PLAYER": {

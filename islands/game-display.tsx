@@ -5,7 +5,7 @@ import {
   ClientMessageVariantsScheme,
   ConnectionClosedData,
   InitPlayerData,
-  PlayerMoveData,
+  PlayerPositionData,
 } from "../message-types.ts";
 import * as v from "@valibot/valibot";
 
@@ -142,9 +142,6 @@ async function initGame(): Promise<void> {
 
         break;
       }
-      case "NEW_CONNECTION": {
-        break;
-      }
       case "OBSOLETE_CONNECTION": {
         const { playerId } = output;
         const obsoletePlayer = game.currentScene.actors.find((actor) =>
@@ -164,6 +161,37 @@ async function initGame(): Promise<void> {
         });
         game.add(otherPlayer);
 
+        const data: PlayerPositionData = {
+          type: "PLAYER_POSITION",
+          playerId: socketId,
+          pos: {
+            x: player.pos.x,
+            y: player.pos.y,
+          },
+        };
+        ws.send(JSON.stringify(data));
+
+        break;
+      }
+      case "PLAYER_SET_POSITION": {
+        const { playerId, pos } = output;
+        let otherPlayer = game.currentScene.actors.find((actor) =>
+          actor.name === playerId
+        );
+
+        if (otherPlayer === undefined) {
+          otherPlayer = new ex.Actor({
+            width: 25,
+            height: 25,
+            color: ex.Color.Red,
+            pos: ex.vec(pos.x, pos.y),
+            name: playerId,
+          });
+          game.add(otherPlayer);
+        } else {
+          otherPlayer.pos = ex.vec(pos.x, pos.y);
+        }
+
         break;
       }
     }
@@ -180,8 +208,8 @@ async function initGame(): Promise<void> {
 
   // Event handling
   player.events.on("moving", () => {
-    const data: PlayerMoveData = {
-      type: "PLAYER_MOVE",
+    const data: PlayerPositionData = {
+      type: "PLAYER_POSITION",
       playerId: socketId,
       pos: {
         x: player.pos.x,

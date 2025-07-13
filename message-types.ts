@@ -1,19 +1,12 @@
 import * as v from "@valibot/valibot";
 
-// Client schemes
+// Client handled schemes
 const ConnectionAcceptedScheme = v.object({
   type: v.literal("CONNECTION_ACCEPTED"),
   socketId: v.string(),
   otherPlayers: v.array(v.object({
     id: v.string(),
   })),
-});
-
-const NewConnectionScheme = v.object({
-  type: v.literal("NEW_CONNECTION"),
-  playerData: v.object({
-    id: v.string(),
-  }),
 });
 
 const ObsoleteConnectionScheme = v.object({
@@ -36,23 +29,33 @@ export type InitPlayerForPlayersData = v.InferOutput<
   typeof InitPlayerForPlayersScheme
 >;
 
-export const ClientMessageVariantsScheme = v.variant("type", [
-  ConnectionAcceptedScheme,
-  NewConnectionScheme,
-  ObsoleteConnectionScheme,
-  InitPlayerForPlayersScheme,
-]);
-
-// Server schemes.
-export const PlayerMoveScheme = v.object({
-  type: v.literal("PLAYER_MOVE"),
+const PlayerSetPosition = v.object({
+  type: v.literal("PLAYER_SET_POSITION"),
   playerId: v.string(),
   pos: v.object({
     x: v.number(),
     y: v.number(),
   }),
 });
-export type PlayerMoveData = v.InferOutput<typeof PlayerMoveScheme>;
+export type PlayerSetPosition = v.InferOutput<typeof PlayerSetPosition>;
+
+export const ClientMessageVariantsScheme = v.variant("type", [
+  ConnectionAcceptedScheme,
+  ObsoleteConnectionScheme,
+  InitPlayerForPlayersScheme,
+  PlayerSetPosition,
+]);
+
+// Server handled schemes.
+export const PlayerPositionScheme = v.object({
+  type: v.literal("PLAYER_POSITION"),
+  playerId: v.string(),
+  pos: v.object({
+    x: v.number(),
+    y: v.number(),
+  }),
+});
+export type PlayerPositionData = v.InferOutput<typeof PlayerPositionScheme>;
 
 const ConnectionClosedScheme = v.object({
   type: v.literal("CONNECTION_CLOSED"),
@@ -71,7 +74,7 @@ const InitPlayerScheme = v.object({
 export type InitPlayerData = v.InferOutput<typeof InitPlayerScheme>;
 
 export const ServerMessageVariantsScheme = v.variant("type", [
-  PlayerMoveScheme,
+  PlayerPositionScheme,
   ConnectionClosedScheme,
   InitPlayerScheme,
 ]);
