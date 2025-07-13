@@ -1,9 +1,18 @@
 import {
-  MessageVariantsScheme,
+  InitPlayerForPlayersData,
   ObsoleteConnectionData,
+  ServerMessageVariantsScheme,
 } from "../message-types.ts";
 import { define } from "../utils.ts";
 import * as v from "@valibot/valibot";
+
+interface Player {
+  socket: WebSocket;
+  pos: {
+    x: number;
+    y: number;
+  };
+}
 
 const socketMap = new Map<string, WebSocket>();
 
@@ -36,26 +45,26 @@ export const socket = define.middleware(({ req }) => {
     };
     ws.send(JSON.stringify(connectionAcceptedData));
 
-    // Send message to all connected players...
-    const newConnectionBroadcast = {
-      type: "NEW_CONNECTION",
-      playerData: {
-        id: socketId,
-      },
-    };
+    // // Send message to all connected players...
+    // const newConnectionBroadcast = {
+    //   type: "NEW_CONNECTION",
+    //   playerData: {
+    //     id: socketId,
+    //   },
+    // };
 
-    for (const [id, socket] of socketMap.entries()) {
-      if (id === socketId) {
-        continue;
-      }
-      socket.send(JSON.stringify(newConnectionBroadcast));
-    }
+    // for (const [id, socket] of socketMap.entries()) {
+    //   if (id === socketId) {
+    //     continue;
+    //   }
+    //   socket.send(JSON.stringify(newConnectionBroadcast));
+    // }
   });
 
   ws.addEventListener("message", ({ data }) => {
     console.log("Socket message received:", data);
     const { success, output, issues } = v.safeParse(
-      MessageVariantsScheme,
+      ServerMessageVariantsScheme,
       JSON.parse(data),
     );
 
@@ -76,6 +85,27 @@ export const socket = define.middleware(({ req }) => {
         for (const socket of socketMap.values()) {
           socket.send(JSON.stringify(data));
         }
+        break;
+      }
+      case "PLAYER_MOVE": {
+        break;
+      }
+      case "INIT_PLAYER": {
+        for (const [id, socket] of socketMap.entries()) {
+          if (id === output.socketId) {
+            continue;
+          }
+          const data: InitPlayerForPlayersData = {
+            type: "INIT_PLAYERS_FOR_PLAYER",
+            player: {
+              playerId: id,
+              x: output.pos.x,
+              y: output.pos.y,
+            },
+          };
+          socket.send(JSON.stringify(data));
+        }
+        break;
       }
     }
   });
@@ -84,8 +114,8 @@ export const socket = define.middleware(({ req }) => {
     console.log("Socket error:", event);
   });
 
-  ws.addEventListener("close", (event) => {
-    console.log("Connection closed!", event);
+  ws.addEventListener("close", () => {
+    console.log("Connection closed!");
   });
 
   return response;

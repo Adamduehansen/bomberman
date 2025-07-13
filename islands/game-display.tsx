@@ -2,8 +2,9 @@ import { useEffect } from "preact/hooks";
 import * as ex from "excalibur";
 import { JSX } from "preact";
 import {
+  ClientMessageVariantsScheme,
   ConnectionClosedData,
-  MessageVariantsScheme,
+  InitPlayerData,
   PlayerMoveData,
 } from "../message-types.ts";
 import * as v from "@valibot/valibot";
@@ -41,7 +42,7 @@ class Player extends ex.Actor {
   constructor(args: PlayerArgs) {
     super({
       pos: args.pos,
-      color: ex.Color.Red,
+      color: ex.Color.Green,
       width: 25,
       height: 25,
     });
@@ -75,49 +76,7 @@ async function initGame(): Promise<void> {
   let connected = false;
   let socketId: string;
 
-  // ===== Socket stuff =====
-  const ws = new WebSocket("/ws");
-  ws.addEventListener("open", () => {
-    console.log("Connection open from game!");
-    connected = true;
-  });
-  ws.addEventListener("message", ({ data }) => {
-    console.log("DEBUG: Socket message received:", data);
-
-    const { success, output, issues } = v.safeParse(
-      MessageVariantsScheme,
-      JSON.parse(data),
-    );
-    if (success === false) {
-      console.warn("Unhandled type", data);
-      console.warn(issues);
-      return;
-    }
-
-    switch (output.type) {
-      case "CONNECTION_ACCEPTED": {
-        socketId = output.socketId;
-        break;
-      }
-      case "NEW_CONNECTION": {
-        break;
-      }
-      case "OBSOLETE_CONNECTION": {
-        break;
-      }
-    }
-  });
-
-  globalThis.addEventListener("beforeunload", () => {
-    const data: ConnectionClosedData = {
-      type: "CONNECTION_CLOSED",
-      socketId: socketId,
-    };
-    ws.send(JSON.stringify(data));
-    ws.close();
-  });
-
-  // ===== Game stuff =====
+  // ===== Init Game stuff =====
   const game = new ex.Engine({
     width: 600,
     height: 600,
@@ -143,6 +102,78 @@ async function initGame(): Promise<void> {
       ex.randomInRange(50, 550),
     ),
   });
+
+  game.add(player);
+
+  await game.start();
+
+  // ===== Socket stuff =====
+  const ws = new WebSocket("/ws");
+  ws.addEventListener("open", () => {
+    console.log("Connection open from game!");
+    connected = true;
+  });
+  ws.addEventListener("message", ({ data }) => {
+    console.log("DEBUG: Socket message received:", data);
+
+    const { success, output, issues } = v.safeParse(
+      ClientMessageVariantsScheme,
+      JSON.parse(data),
+    );
+    if (success === false) {
+      console.warn("Unhandled type", data);
+      console.warn(issues);
+      return;
+    }
+
+    switch (output.type) {
+      case "CONNECTION_ACCEPTED": {
+        socketId = output.socketId;
+
+        const data: InitPlayerData = {
+          type: "INIT_PLAYER",
+          socketId: socketId,
+          pos: {
+            x: player.pos.x,
+            y: player.pos.y,
+          },
+        };
+        ws.send(JSON.stringify(data));
+
+        break;
+      }
+      case "NEW_CONNECTION": {
+        break;
+      }
+      case "OBSOLETE_CONNECTION": {
+        break;
+      }
+      case "INIT_PLAYERS_FOR_PLAYER": {
+        const { playerId, x, y } = output.player;
+        const otherPlayer = new ex.Actor({
+          width: 25,
+          height: 25,
+          color: ex.Color.Red,
+          pos: ex.vec(x, y),
+          name: playerId,
+        });
+        game.add(otherPlayer);
+
+        break;
+      }
+    }
+  });
+
+  globalThis.addEventListener("beforeunload", () => {
+    const data: ConnectionClosedData = {
+      type: "CONNECTION_CLOSED",
+      socketId: socketId,
+    };
+    ws.send(JSON.stringify(data));
+    ws.close();
+  });
+
+  // Event handling
   player.events.on("moving", () => {
     const data: PlayerMoveData = {
       type: "PLAYER_MOVE",
@@ -154,10 +185,6 @@ async function initGame(): Promise<void> {
     };
     ws.send(JSON.stringify(data));
   });
-
-  game.add(player);
-
-  await game.start();
 }
 
 export default function GameDisplay(): JSX.Element {

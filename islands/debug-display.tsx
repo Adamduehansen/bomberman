@@ -3,7 +3,7 @@ import { useContext, useEffect } from "preact/hooks";
 import { useSignal } from "@preact/signals";
 import * as v from "@valibot/valibot";
 import { Socket } from "./socket-provider.tsx";
-import { MessageVariantsScheme } from "../message-types.ts";
+import { ClientMessageVariantsScheme } from "../message-types.ts";
 
 interface PlayerDebugInfo {
   id: string;
@@ -41,7 +41,7 @@ export default function DebugDisplay(): JSX.Element {
       console.log("DEBUG: Socket message received:", data);
 
       const { success, output, issues } = v.safeParse(
-        MessageVariantsScheme,
+        ClientMessageVariantsScheme,
         JSON.parse(data),
       );
       if (success === false) {
