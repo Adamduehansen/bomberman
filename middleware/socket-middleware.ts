@@ -1,4 +1,9 @@
+import {
+  MessageVariantsScheme,
+  ObsoleteConnectionData,
+} from "../message-types.ts";
 import { define } from "../utils.ts";
+import * as v from "@valibot/valibot";
 
 const socketMap = new Map<string, WebSocket>();
 
@@ -49,14 +54,38 @@ export const socket = define.middleware(({ req }) => {
 
   ws.addEventListener("message", ({ data }) => {
     console.log("Socket message received:", data);
+    const { success, output, issues } = v.safeParse(
+      MessageVariantsScheme,
+      JSON.parse(data),
+    );
+
+    if (success === false) {
+      console.warn("Unhandled type", data);
+      console.warn(issues);
+      return;
+    }
+
+    switch (output.type) {
+      case "CONNECTION_CLOSED": {
+        socketMap.delete(output.socketId);
+
+        const data: ObsoleteConnectionData = {
+          type: "OBSOLETE_CONNECTION",
+          socketId: output.socketId,
+        };
+        for (const socket of socketMap.values()) {
+          socket.send(JSON.stringify(data));
+        }
+      }
+    }
   });
 
   ws.addEventListener("error", (event) => {
     console.log("Socket error:", event);
   });
 
-  ws.addEventListener("close", () => {
-    console.log("Connection closed!");
+  ws.addEventListener("close", (event) => {
+    console.log("Connection closed!", event);
   });
 
   return response;

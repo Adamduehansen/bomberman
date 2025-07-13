@@ -1,7 +1,12 @@
-import { useContext, useEffect } from "preact/hooks";
+import { useEffect } from "preact/hooks";
 import * as ex from "excalibur";
 import { JSX } from "preact";
-import { Socket } from "./socket-provider.tsx";
+import {
+  ConnectionClosedData,
+  MessageVariantsScheme,
+  PlayerMoveData,
+} from "../message-types.ts";
+import * as v from "@valibot/valibot";
 
 interface PlayerArgs {
   pos: ex.Vector;
@@ -47,31 +52,74 @@ class Player extends ex.Actor {
   override onPreUpdate(_engine: ex.Engine, _elapsed: number): void {
     if (this.#controls.isHeld("right")) {
       this.vel.x = PLAYER_SPEED;
+      this.events.emit("moving");
     } else if (this.#controls.isHeld("left")) {
       this.vel.x = -PLAYER_SPEED;
+      this.events.emit("moving");
     } else {
       this.vel.x = 0;
     }
     if (this.#controls.isHeld("up")) {
       this.vel.y = -PLAYER_SPEED;
+      this.events.emit("moving");
     } else if (this.#controls.isHeld("down")) {
       this.vel.y = PLAYER_SPEED;
+      this.events.emit("moving");
     } else {
       this.vel.y = 0;
     }
   }
 }
 
-async function initGame(socket: WebSocket): Promise<void> {
+async function initGame(): Promise<void> {
   let connected = false;
+  let socketId: string;
 
-  socket.addEventListener("open", () => {
+  // ===== Socket stuff =====
+  const ws = new WebSocket("/ws");
+  ws.addEventListener("open", () => {
     console.log("Connection open from game!");
     connected = true;
   });
+  ws.addEventListener("message", ({ data }) => {
+    console.log("DEBUG: Socket message received:", data);
 
+    const { success, output, issues } = v.safeParse(
+      MessageVariantsScheme,
+      JSON.parse(data),
+    );
+    if (success === false) {
+      console.warn("Unhandled type", data);
+      console.warn(issues);
+      return;
+    }
+
+    switch (output.type) {
+      case "CONNECTION_ACCEPTED": {
+        socketId = output.socketId;
+        break;
+      }
+      case "NEW_CONNECTION": {
+        break;
+      }
+      case "OBSOLETE_CONNECTION": {
+        break;
+      }
+    }
+  });
+
+  globalThis.addEventListener("beforeunload", () => {
+    const data: ConnectionClosedData = {
+      type: "CONNECTION_CLOSED",
+      socketId: socketId,
+    };
+    ws.send(JSON.stringify(data));
+    ws.close();
+  });
+
+  // ===== Game stuff =====
   const game = new ex.Engine({
-    width: 800,
+    width: 600,
     height: 600,
     canvasElementId: "root",
   });
@@ -90,7 +138,21 @@ async function initGame(socket: WebSocket): Promise<void> {
   game.add(connectStatus);
 
   const player = new Player({
-    pos: ex.vec(100, 100),
+    pos: ex.vec(
+      ex.randomInRange(50, 550),
+      ex.randomInRange(50, 550),
+    ),
+  });
+  player.events.on("moving", () => {
+    const data: PlayerMoveData = {
+      type: "PLAYER_MOVE",
+      playerId: socketId,
+      pos: {
+        x: player.pos.x,
+        y: player.pos.y,
+      },
+    };
+    ws.send(JSON.stringify(data));
   });
 
   game.add(player);
@@ -99,14 +161,8 @@ async function initGame(socket: WebSocket): Promise<void> {
 }
 
 export default function GameDisplay(): JSX.Element {
-  const socket = useContext(Socket);
-
   useEffect(() => {
-    if (socket === undefined) {
-      return;
-    }
-
-    initGame(socket);
-  }, [socket]);
+    initGame();
+  }, []);
   return <canvas id="root"></canvas>;
 }
