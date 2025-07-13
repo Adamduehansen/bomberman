@@ -45,21 +45,6 @@ export const socket = define.middleware(({ req }) => {
       otherPlayers: otherPlayersData,
     };
     ws.send(JSON.stringify(connectionAcceptedData));
-
-    // // Send message to all connected players...
-    // const newConnectionBroadcast = {
-    //   type: "NEW_CONNECTION",
-    //   playerData: {
-    //     id: socketId,
-    //   },
-    // };
-
-    // for (const [id, socket] of socketMap.entries()) {
-    //   if (id === socketId) {
-    //     continue;
-    //   }
-    //   socket.send(JSON.stringify(newConnectionBroadcast));
-    // }
   });
 
   ws.addEventListener("message", ({ data }) => {

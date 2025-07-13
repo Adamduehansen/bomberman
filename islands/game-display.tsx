@@ -90,6 +90,7 @@ async function initGame(): Promise<void> {
       size: 24,
       unit: ex.FontUnit.Px,
     }),
+    text: "Connection status: 🔴",
   });
   connectStatus.on("predraw", () => {
     connectStatus.text = `Connection status: ${connected ? "🟢" : "🔴"}`;
@@ -112,6 +113,10 @@ async function initGame(): Promise<void> {
   ws.addEventListener("open", () => {
     console.log("Connection open from game!");
     connected = true;
+  });
+  ws.addEventListener("close", () => {
+    console.log("Connection closed!");
+    connected = false;
   });
   ws.addEventListener("message", ({ data }) => {
     console.log("DEBUG: Socket message received:", data);
