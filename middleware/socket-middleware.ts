@@ -80,7 +80,7 @@ export const socket = define.middleware(({ req }) => {
 
         const data: ObsoleteConnectionData = {
           type: "OBSOLETE_CONNECTION",
-          socketId: output.socketId,
+          playerId: output.socketId,
         };
         for (const socket of socketMap.values()) {
           socket.send(JSON.stringify(data));
@@ -98,7 +98,7 @@ export const socket = define.middleware(({ req }) => {
           const data: InitPlayerForPlayersData = {
             type: "INIT_PLAYERS_FOR_PLAYER",
             player: {
-              playerId: id,
+              playerId: output.socketId,
               x: output.pos.x,
               y: output.pos.y,
             },

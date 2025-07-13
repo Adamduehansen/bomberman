@@ -146,6 +146,11 @@ async function initGame(): Promise<void> {
         break;
       }
       case "OBSOLETE_CONNECTION": {
+        const { playerId } = output;
+        const obsoletePlayer = game.currentScene.actors.find((actor) =>
+          actor.name === playerId
+        );
+        obsoletePlayer?.kill();
         break;
       }
       case "INIT_PLAYERS_FOR_PLAYER": {

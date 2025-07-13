@@ -18,7 +18,7 @@ const NewConnectionScheme = v.object({
 
 const ObsoleteConnectionScheme = v.object({
   type: v.literal("OBSOLETE_CONNECTION"),
-  socketId: v.string(),
+  playerId: v.string(),
 });
 export type ObsoleteConnectionData = v.InferOutput<
   typeof ObsoleteConnectionScheme
