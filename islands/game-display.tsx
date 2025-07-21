@@ -6,12 +6,9 @@ import {
   ConnectionClosedData,
   InitPlayerData,
   PlayerPositionData,
+  SpawnBombData,
 } from "../message-types.ts";
 import * as v from "@valibot/valibot";
-
-interface PlayerArgs {
-  pos: ex.Vector;
-}
 
 class ControlsComponent extends ex.Component {
   declare owner: ex.Actor;
@@ -21,6 +18,7 @@ class ControlsComponent extends ex.Component {
     right: [ex.Keys.D, ex.Keys.Right],
     down: [ex.Keys.S, ex.Keys.Down],
     left: [ex.Keys.A, ex.Keys.Left],
+    bomb: [ex.Keys.Space, ex.Keys.Enter],
   } as const;
 
   isHeld(control: keyof typeof this.controlSchema): boolean {
@@ -32,9 +30,49 @@ class ControlsComponent extends ex.Component {
     return engine.input.keyboard.isHeld(this.controlSchema[control][0]) ||
       engine.input.keyboard.isHeld(this.controlSchema[control][1]);
   }
+
+  wasPressed(control: keyof typeof this.controlSchema): boolean {
+    const engine = this.owner?.scene?.engine;
+    if (engine === undefined) {
+      return false;
+    }
+
+    return engine.input.keyboard.wasPressed(this.controlSchema[control][0]);
+  }
+}
+
+interface BombArgs {
+  pos: ex.Vector;
+}
+
+class Bomb extends ex.Actor {
+  constructor(args: BombArgs) {
+    super({
+      name: "Bomb",
+      pos: args.pos,
+      width: 25,
+      height: 25,
+      color: ex.Color.Yellow,
+    });
+  }
+
+  override onInitialize(_engine: ex.Engine): void {
+    const killTimer = new ex.Timer({
+      interval: 2_000,
+      action: () => {
+        this.kill();
+      },
+    });
+    this.scene?.addTimer(killTimer);
+    killTimer.start();
+  }
 }
 
 const PLAYER_SPEED = 100;
+
+interface PlayerArgs {
+  pos: ex.Vector;
+}
 
 class Player extends ex.Actor {
   #controls = new ControlsComponent();
@@ -69,8 +107,17 @@ class Player extends ex.Actor {
     } else {
       this.vel.y = 0;
     }
+
+    if (this.#controls.wasPressed("bomb")) {
+      this.scene?.emit("c_spawnbomb", this.pos);
+    }
   }
 }
+
+const SpawnBombEventScheme = v.object({
+  x: v.number(),
+  y: v.number(),
+});
 
 async function initGame(): Promise<void> {
   let connected = false;
@@ -199,6 +246,16 @@ async function initGame(): Promise<void> {
 
         break;
       }
+      case "SPAWN_BOMB": {
+        const { pos } = output;
+        game.add(
+          new Bomb({
+            pos: ex.vec(pos.x, pos.y),
+          }),
+        );
+
+        break;
+      }
     }
   });
 
@@ -209,6 +266,32 @@ async function initGame(): Promise<void> {
     };
     ws.send(JSON.stringify(data));
     ws.close();
+  });
+
+  game.currentScene.on("c_spawnbomb", (event) => {
+    const { success, output: spawnBombPos } = v.safeParse(
+      SpawnBombEventScheme,
+      event,
+    );
+    if (success === false) {
+      return;
+    }
+
+    game.add(
+      new Bomb({
+        pos: ex.vec(spawnBombPos.x, spawnBombPos.y),
+      }),
+    );
+
+    const data: SpawnBombData = {
+      type: "SPAWN_BOMB",
+      socketId: socketId,
+      pos: {
+        x: spawnBombPos.x,
+        y: spawnBombPos.y,
+      },
+    };
+    ws.send(JSON.stringify(data));
   });
 
   // Event handling

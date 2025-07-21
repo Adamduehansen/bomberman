@@ -1,5 +1,16 @@
 import * as v from "@valibot/valibot";
 
+// Common handled schemes.
+export const SpawnBombScheme = v.object({
+  type: v.literal("SPAWN_BOMB"),
+  socketId: v.string(),
+  pos: v.object({
+    x: v.number(),
+    y: v.number(),
+  }),
+});
+export type SpawnBombData = v.InferOutput<typeof SpawnBombScheme>;
+
 // Client handled schemes
 const ConnectionAcceptedScheme = v.object({
   type: v.literal("CONNECTION_ACCEPTED"),
@@ -44,6 +55,7 @@ export const ClientMessageVariantsScheme = v.variant("type", [
   ObsoleteConnectionScheme,
   InitPlayerForPlayersScheme,
   PlayerSetPosition,
+  SpawnBombScheme,
 ]);
 
 // Server handled schemes.
@@ -77,4 +89,5 @@ export const ServerMessageVariantsScheme = v.variant("type", [
   PlayerPositionScheme,
   ConnectionClosedScheme,
   InitPlayerScheme,
+  SpawnBombScheme,
 ]);

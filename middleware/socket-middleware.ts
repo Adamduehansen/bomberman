@@ -107,6 +107,16 @@ export const socket = define.middleware(({ req }) => {
         }
         break;
       }
+      case "SPAWN_BOMB": {
+        for (const [id, socket] of socketMap.entries()) {
+          if (id === output.socketId) {
+            continue;
+          }
+
+          socket.send(JSON.stringify(output));
+        }
+        break;
+      }
     }
   });
 
