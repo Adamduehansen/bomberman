@@ -9,6 +9,7 @@ import {
 } from "../message-types.ts";
 import { Bomb } from "./actors/bomb.ts";
 import { Bomberman } from "./actors/bomberman.ts";
+import { loader } from "./resources.ts";
 
 const PosScheme = v.object({
   x: v.number(),
@@ -50,7 +51,7 @@ export async function initGame(): Promise<void> {
 
   game.add(player);
 
-  await game.start();
+  await game.start(loader);
 
   // ===== Socket stuff =====
   const ws = new WebSocket("/ws");

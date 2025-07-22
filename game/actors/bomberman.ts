@@ -1,5 +1,5 @@
 import * as ex from "excalibur";
-import { ExplosionGroup } from "./explosion.ts";
+import { Resources } from "../resources.ts";
 
 class ControlsComponent extends ex.Component {
   declare owner: ex.Actor;
@@ -39,6 +39,16 @@ interface Args {
   name: string;
 }
 
+const playerSpritesheet = ex.SpriteSheet.fromImageSource({
+  image: Resources.img.player,
+  grid: {
+    columns: 7,
+    rows: 3,
+    spriteHeight: 16,
+    spriteWidth: 16,
+  },
+});
+
 export class Bomberman extends ex.Actor {
   #controls = new ControlsComponent();
 
@@ -49,11 +59,13 @@ export class Bomberman extends ex.Actor {
       color: ex.Color.Green,
       width: 25,
       height: 25,
-      // collisionGroup: BombermanCanCombineWith,
       collisionType: ex.CollisionType.Active,
     });
 
     this.addComponent(this.#controls);
+  }
+
+  override onInitialize(_engine: ex.Engine): void {
   }
 
   override onPreUpdate(_engine: ex.Engine, _elapsed: number): void {
@@ -80,13 +92,4 @@ export class Bomberman extends ex.Actor {
       this.scene?.emit("c_spawnbomb", this.pos);
     }
   }
-
-  // override onCollisionStart(
-  //   self: ex.Collider,
-  //   other: ex.Collider,
-  //   side: ex.Side,
-  //   contact: ex.CollisionContact,
-  // ): void {
-  //   console.log("hello, world!");
-  // }
 }
