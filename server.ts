@@ -3,9 +3,8 @@ import {
   ObsoleteConnectionData,
   PlayerSetPosition,
   ServerMessageVariantsScheme,
-} from "../message-types.ts";
-import { define } from "../utils.ts";
-import * as v from "@valibot/valibot";
+} from "./message-types.ts";
+import * as v from "valibot";
 
 interface Player {
   socket: WebSocket;
@@ -17,7 +16,7 @@ interface Player {
 
 const socketMap = new Map<string, WebSocket>();
 
-export const socket = define.middleware(({ req }) => {
+Deno.serve((req) => {
   const upgradeHeader = req.headers.get("upgrade");
   if (upgradeHeader !== "websocket") {
     return new Response(null, {

@@ -1,45 +1,16 @@
 {
   "tasks": {
-    "check": "deno fmt --check . && deno lint . && deno check",
-    "dev": "deno run -A --watch=static/,routes/ dev.ts",
-    "build": "deno run -A dev.ts build",
-    "start": "deno run -A main.ts",
-    "update": "deno run -A -r jsr:@fresh/update ."
-  },
-  "lint": {
-    "rules": {
-      "tags": [
-        "fresh",
-        "recommended"
-      ]
+    "dev:client": "vite",
+    "build:client": "vite build",
+    "server": "deno run --allow-net server.ts",
+    "dev": {
+      "dependencies": ["dev:client", "server"]
     }
   },
-  "exclude": [
-    "**/_fresh/*"
-  ],
   "imports": {
-    "@valibot/valibot": "jsr:@valibot/valibot@^1.1.0",
+    "valibot": "npm:valibot@^1.1.0",
     "excalibur": "npm:excalibur@^0.30.3",
-    "fresh": "jsr:@fresh/core@^2.0.0-alpha.37",
-    "preact": "npm:preact@^10.26.9",
-    "@preact/signals": "npm:@preact/signals@^2.2.1"
+    "vite": "npm:vite@^7.0.5"
   },
-  "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.asynciterable",
-      "dom.iterable",
-      "deno.ns"
-    ],
-    "jsx": "precompile",
-    "jsxImportSource": "preact",
-    "jsxPrecompileSkipElements": [
-      "a",
-      "img",
-      "source",
-      "body",
-      "html",
-      "head"
-    ]
-  }
+  "nodeModulesDir": "auto"
 }

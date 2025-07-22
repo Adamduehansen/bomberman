@@ -1,4 +1,4 @@
-import * as v from "@valibot/valibot";
+import * as v from "valibot";
 
 // Common handled schemes.
 export const SpawnBombScheme = v.object({
