@@ -1,4 +1,5 @@
 import * as ex from "excalibur";
+import { Explosion } from "./explosion.ts";
 
 interface Args {
   pos: ex.Vector;
@@ -12,6 +13,7 @@ export class Bomb extends ex.Actor {
       width: 25,
       height: 25,
       color: ex.Color.Yellow,
+      collisionType: ex.CollisionType.Fixed,
     });
   }
 
@@ -24,5 +26,11 @@ export class Bomb extends ex.Actor {
     });
     this.scene?.addTimer(killTimer);
     killTimer.start();
+  }
+
+  override onPreKill(scene: ex.Scene): void {
+    const explosion = new Explosion();
+    explosion.pos = ex.vec(this.pos.x, this.pos.y);
+    scene.add(explosion);
   }
 }

@@ -1,4 +1,5 @@
 import * as ex from "excalibur";
+import { ExplosionGroup } from "./explosion.ts";
 
 class ControlsComponent extends ex.Component {
   declare owner: ex.Actor;
@@ -37,6 +38,10 @@ interface Args {
   pos: ex.Vector;
 }
 
+const BombermanCanCombineWith = ex.CollisionGroup.collidesWith([
+  ExplosionGroup,
+]);
+
 export class Bomberman extends ex.Actor {
   #controls = new ControlsComponent();
 
@@ -46,6 +51,8 @@ export class Bomberman extends ex.Actor {
       color: ex.Color.Green,
       width: 25,
       height: 25,
+      // collisionGroup: BombermanCanCombineWith,
+      collisionType: ex.CollisionType.Fixed,
     });
 
     this.addComponent(this.#controls);
@@ -75,4 +82,13 @@ export class Bomberman extends ex.Actor {
       this.scene?.emit("c_spawnbomb", this.pos);
     }
   }
+
+  // override onCollisionStart(
+  //   self: ex.Collider,
+  //   other: ex.Collider,
+  //   side: ex.Side,
+  //   contact: ex.CollisionContact,
+  // ): void {
+  //   console.log("hello, world!");
+  // }
 }

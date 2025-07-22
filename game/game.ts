@@ -22,6 +22,7 @@ export async function initGame(): Promise<void> {
   const game = new ex.Engine({
     width: 600,
     height: 600,
+    maxFps: 60,
     canvasElementId: "root",
   });
 
