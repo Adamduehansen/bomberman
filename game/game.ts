@@ -41,6 +41,7 @@ export async function initGame(): Promise<void> {
   game.add(connectStatus);
 
   const player = new Bomberman({
+    name: "player",
     pos: ex.vec(
       ex.randomInRange(50, 550),
       ex.randomInRange(50, 550),

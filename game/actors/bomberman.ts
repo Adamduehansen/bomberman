@@ -36,23 +36,21 @@ const PLAYER_SPEED = 100;
 
 interface Args {
   pos: ex.Vector;
+  name: string;
 }
-
-const BombermanCanCombineWith = ex.CollisionGroup.collidesWith([
-  ExplosionGroup,
-]);
 
 export class Bomberman extends ex.Actor {
   #controls = new ControlsComponent();
 
   constructor(args: Args) {
     super({
+      name: args.name,
       pos: args.pos,
       color: ex.Color.Green,
       width: 25,
       height: 25,
       // collisionGroup: BombermanCanCombineWith,
-      collisionType: ex.CollisionType.Fixed,
+      collisionType: ex.CollisionType.Active,
     });
 
     this.addComponent(this.#controls);

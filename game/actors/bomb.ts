@@ -13,7 +13,7 @@ export class Bomb extends ex.Actor {
       width: 25,
       height: 25,
       color: ex.Color.Yellow,
-      collisionType: ex.CollisionType.Fixed,
+      collisionType: ex.CollisionType.Passive,
     });
   }
 
@@ -26,6 +26,15 @@ export class Bomb extends ex.Actor {
     });
     this.scene?.addTimer(killTimer);
     killTimer.start();
+  }
+
+  override onCollisionEnd(
+    _self: ex.Collider,
+    _other: ex.Collider,
+    _side: ex.Side,
+    _lastContact: ex.CollisionContact,
+  ): void {
+    this.body.collisionType = ex.CollisionType.Fixed;
   }
 
   override onPreKill(scene: ex.Scene): void {
