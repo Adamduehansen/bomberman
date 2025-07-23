@@ -9,8 +9,9 @@ import {
   type SpawnBombData,
 } from "../message-types.ts";
 import { Bomb } from "./actors/bomb.ts";
-import { Bomberman } from "./actors/bomberman.ts";
 import { loader } from "./resources.ts";
+import { Player } from "./actors/player.ts";
+import { Enemy } from "./actors/enemy.ts";
 
 const PosScheme = v.object({
   x: v.number(),
@@ -41,8 +42,7 @@ connectStatus.on("predraw", () => {
 });
 game.add(connectStatus);
 
-const player = new Bomberman({
-  name: "player",
+const player = new Player({
   pos: ex.vec(
     ex.randomInRange(50, 550),
     ex.randomInRange(50, 550),
@@ -105,12 +105,9 @@ ws.addEventListener("message", ({ data }) => {
     }
     case "INIT_PLAYERS_FOR_PLAYER": {
       const { playerId, x, y } = output.player;
-      const otherPlayer = new ex.Actor({
-        width: 25,
-        height: 25,
-        color: ex.Color.Red,
-        pos: ex.vec(x, y),
+      const otherPlayer = new Enemy({
         name: playerId,
+        pos: ex.vec(x, y),
       });
       game.add(otherPlayer);
 
@@ -133,12 +130,9 @@ ws.addEventListener("message", ({ data }) => {
       );
 
       if (otherPlayer === undefined) {
-        otherPlayer = new ex.Actor({
-          width: 25,
-          height: 25,
-          color: ex.Color.Red,
-          pos: ex.vec(pos.x, pos.y),
+        otherPlayer = new Enemy({
           name: playerId,
+          pos: ex.vec(pos.x, pos.y),
         });
         game.add(otherPlayer);
       } else {
