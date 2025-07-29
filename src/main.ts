@@ -12,6 +12,7 @@ import { Bomb } from "./actors/bomb.ts";
 import { loader } from "./resources.ts";
 import { Player } from "./actors/player.ts";
 import { Enemy } from "./actors/enemy.ts";
+import { AnimationsComponent } from "./components/animations.ts";
 
 const PosScheme = v.object({
   x: v.number(),
@@ -27,6 +28,7 @@ const game = new ex.Engine({
   maxFps: 60,
   suppressPlayButton: true,
 });
+ex.Logger.getInstance().defaultLevel = ex.LogLevel.Debug;
 
 const connectStatus = new ex.Label({
   pos: ex.vec(20, 20),
@@ -67,7 +69,7 @@ ws.addEventListener("error", (event) => {
   console.log("Could not get connection to server", event);
 });
 ws.addEventListener("message", ({ data }) => {
-  console.log("DEBUG: Socket message received:", data);
+  ex.Logger.getInstance().debug("Socket message received:", data);
 
   const { success, output, issues } = v.safeParse(
     ClientMessageVariantsScheme,
@@ -124,7 +126,7 @@ ws.addEventListener("message", ({ data }) => {
       break;
     }
     case "PLAYER_SET_POSITION": {
-      const { playerId, pos } = output;
+      const { playerId, pos, direction } = output;
       let otherPlayer = game.currentScene.actors.find((actor) =>
         actor.name === playerId
       );
@@ -137,6 +139,12 @@ ws.addEventListener("message", ({ data }) => {
         game.add(otherPlayer);
       } else {
         otherPlayer.pos = ex.vec(pos.x, pos.y);
+
+        if (direction === undefined) {
+          return;
+        }
+        const animationComponent = otherPlayer.get(AnimationsComponent);
+        animationComponent.set(direction);
       }
 
       break;
@@ -190,7 +198,7 @@ game.currentScene.on("c_spawnbomb", (event) => {
 });
 
 // Event handling
-player.events.on("c_moving", () => {
+player.events.on("c_moving", (direction) => {
   const data: PlayerPositionData = {
     type: "PLAYER_POSITION",
     playerId: socketId,
@@ -198,6 +206,7 @@ player.events.on("c_moving", () => {
       x: player.pos.x,
       y: player.pos.y,
     },
+    direction: typeof direction === "string" ? direction : "",
   };
 
   if (ws.readyState !== ws.OPEN) {

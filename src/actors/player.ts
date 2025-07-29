@@ -31,6 +31,16 @@ class ControlsComponent extends ex.Component {
 
     return engine.input.keyboard.wasPressed(this.controlSchema[control][0]);
   }
+
+  wasReleased(control: keyof typeof this.controlSchema): boolean {
+    const engine = this.owner?.scene?.engine;
+    if (engine === undefined) {
+      return false;
+    }
+
+    return engine.input.keyboard.wasReleased(this.controlSchema[control][0]) ||
+      engine.input.keyboard.wasReleased(this.controlSchema[control][1]);
+  }
 }
 
 interface Args {
@@ -59,24 +69,33 @@ export class Player extends Bomberman {
     if (this.#controls.isHeld("right")) {
       this.vel.x = PLAYER_SPEED;
       this.animations.set("right");
-      this.events.emit("c_moving");
+      this.events.emit("c_moving", "right");
     } else if (this.#controls.isHeld("left")) {
       this.vel.x = -PLAYER_SPEED;
       this.animations.set("left");
-      this.events.emit("c_moving");
+      this.events.emit("c_moving", "left");
     } else {
       this.vel.x = 0;
     }
     if (this.#controls.isHeld("up")) {
       this.vel.y = -PLAYER_SPEED;
       this.animations.set("up");
-      this.events.emit("c_moving");
+      this.events.emit("c_moving", "up");
     } else if (this.#controls.isHeld("down")) {
       this.vel.y = PLAYER_SPEED;
       this.animations.set("down");
-      this.events.emit("c_moving");
+      this.events.emit("c_moving", "down");
     } else {
       this.vel.y = 0;
+    }
+
+    if (
+      this.#controls.wasReleased("right") ||
+      this.#controls.wasReleased("down") ||
+      this.#controls.wasReleased("left") ||
+      this.#controls.wasReleased("up")
+    ) {
+      this.events.emit("c_moving", "idle");
     }
 
     if (this.vel.x === 0 && this.vel.y === 0) {

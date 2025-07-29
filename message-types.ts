@@ -47,6 +47,7 @@ const PlayerSetPosition = v.object({
     x: v.number(),
     y: v.number(),
   }),
+  direction: v.optional(v.string()),
 });
 export type PlayerSetPosition = v.InferOutput<typeof PlayerSetPosition>;
 
@@ -66,6 +67,7 @@ export const PlayerPositionScheme = v.object({
     x: v.number(),
     y: v.number(),
   }),
+  direction: v.optional(v.string()),
 });
 export type PlayerPositionData = v.InferOutput<typeof PlayerPositionScheme>;
 

@@ -73,7 +73,7 @@ Deno.serve((req) => {
         break;
       }
       case "PLAYER_POSITION": {
-        const { playerId, pos } = output;
+        const { playerId, pos, direction } = output;
         for (const [id, socket] of socketMap.entries()) {
           if (id === playerId) {
             continue;
@@ -83,6 +83,7 @@ Deno.serve((req) => {
             type: "PLAYER_SET_POSITION",
             playerId: playerId,
             pos: pos,
+            direction: direction,
           };
 
           socket.send(JSON.stringify(data));
