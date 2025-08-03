@@ -1,11 +1,27 @@
 import * as ex from "excalibur";
 import { Explosion } from "./explosion.ts";
+import { AnimationsComponent } from "../components/animations.ts";
+import { Resources } from "../resources.ts";
 
 interface Args {
   pos: ex.Vector;
 }
 
+const spriteSheet = ex.SpriteSheet.fromImageSource({
+  image: Resources.img.bomb,
+  grid: {
+    columns: 3,
+    rows: 1,
+    spriteHeight: 16,
+    spriteWidth: 16,
+  },
+});
+
 export class Bomb extends ex.Actor {
+  #animations = new AnimationsComponent({
+    idle: ex.Animation.fromSpriteSheet(spriteSheet, ex.range(0, 2), 100),
+  });
+
   constructor(args: Args) {
     super({
       name: "Bomb",
@@ -15,9 +31,12 @@ export class Bomb extends ex.Actor {
       color: ex.Color.Yellow,
       collisionType: ex.CollisionType.Passive,
     });
+
+    this.addComponent(this.#animations);
   }
 
   override onInitialize(_engine: ex.Engine): void {
+    this.#animations.set("idle");
     const killTimer = new ex.Timer({
       interval: 2_000,
       action: () => {
