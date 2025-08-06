@@ -5,6 +5,7 @@ export const Resources = {
     player: new ex.ImageSource("/sprites/player-spritesheet.png"),
     enemy: new ex.ImageSource("/sprites/enemy-spritesheet.png"),
     bomb: new ex.ImageSource("/sprites/bomb-spritesheet.png"),
+    explosion: new ex.ImageSource("/sprites/explosion-spritesheet.png"),
   },
 } as const;
 
