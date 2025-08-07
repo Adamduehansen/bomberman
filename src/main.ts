@@ -5,6 +5,7 @@ import {
   ClientMessageVariantsScheme,
   type ConnectionClosedData,
   type InitPlayerData,
+  PlayerDieData,
   type PlayerPositionData,
   type SpawnBombData,
 } from "../message-types.ts";
@@ -207,6 +208,19 @@ player.events.on("c_moving", (direction) => {
       y: player.pos.y,
     },
     direction: typeof direction === "string" ? direction : "",
+  };
+
+  if (ws.readyState !== ws.OPEN) {
+    return;
+  }
+
+  ws.send(JSON.stringify(data));
+});
+
+player.events.on("c_die", () => {
+  const data: PlayerDieData = {
+    type: "PLAYER_DIE",
+    playerId: socketId,
   };
 
   if (ws.readyState !== ws.OPEN) {

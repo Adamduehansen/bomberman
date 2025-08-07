@@ -1,6 +1,7 @@
 import * as ex from "excalibur";
 import { Resources } from "../resources.ts";
 import { AnimationsComponent } from "../components/animations.ts";
+import { ExplosionCollisionGroup } from "../collision-groups.ts";
 
 const spriteSheet = ex.SpriteSheet.fromImageSource({
   image: Resources.img.explosion,
@@ -20,6 +21,8 @@ export class Explosion extends ex.Actor {
       name: "Explosion",
       width: 25,
       height: 25,
+      collisionGroup: ExplosionCollisionGroup,
+      collisionType: ex.CollisionType.Fixed,
     });
 
     const explodeAnimation = ex.Animation.fromSpriteSheetCoordinates({

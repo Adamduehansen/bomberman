@@ -1,5 +1,10 @@
 import * as ex from "excalibur";
 import { AnimationsComponent } from "../components/animations.ts";
+import { ExplosionCollisionGroup } from "../collision-groups.ts";
+
+const canCollideWith = ex.CollisionGroup.collidesWith([
+  ExplosionCollisionGroup,
+]);
 
 interface Args {
   name: string;
@@ -16,6 +21,7 @@ export abstract class Bomberman extends ex.Actor {
       pos: args.pos,
       collisionType: ex.CollisionType.Active,
       collider: ex.Shape.Box(16, 16),
+      collisionGroup: canCollideWith,
     });
 
     const spriteSheet = ex.SpriteSheet.fromImageSource({
@@ -26,6 +32,16 @@ export abstract class Bomberman extends ex.Actor {
         spriteHeight: 16,
         spriteWidth: 16,
       },
+    });
+
+    const dieAnimation = ex.Animation.fromSpriteSheet(
+      spriteSheet,
+      ex.range(14, 20),
+      500,
+      ex.AnimationStrategy.End,
+    );
+    dieAnimation.events.on("end", () => {
+      this.kill();
     });
 
     this.animations = new AnimationsComponent({
@@ -54,6 +70,7 @@ export abstract class Bomberman extends ex.Actor {
         100,
         ex.AnimationStrategy.PingPong,
       ),
+      die: dieAnimation,
     });
   }
 

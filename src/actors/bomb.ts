@@ -2,6 +2,7 @@ import * as ex from "excalibur";
 import { Explosion } from "./explosion.ts";
 import { AnimationsComponent } from "../components/animations.ts";
 import { Resources } from "../resources.ts";
+import { BombCollisonGroup } from "../collision-groups.ts";
 
 interface Args {
   pos: ex.Vector;
@@ -30,6 +31,7 @@ export class Bomb extends ex.Actor {
       height: 25,
       color: ex.Color.Yellow,
       collisionType: ex.CollisionType.Passive,
+      collisionGroup: BombCollisonGroup,
     });
 
     this.addComponent(this.#animations);

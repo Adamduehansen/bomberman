@@ -50,6 +50,7 @@ interface Args {
 const PLAYER_SPEED = 100;
 
 export class Player extends Bomberman {
+  #dead = false;
   #controls = new ControlsComponent();
 
   constructor(args: Args) {
@@ -66,6 +67,11 @@ export class Player extends Bomberman {
   }
 
   override onPreUpdate(_engine: ex.Engine, _elapsed: number): void {
+    if (this.#dead) {
+      this.vel = ex.Vector.Zero;
+      return;
+    }
+
     if (this.#controls.isHeld("right")) {
       this.vel.x = PLAYER_SPEED;
       this.animations.set("right");
@@ -105,5 +111,18 @@ export class Player extends Bomberman {
     if (this.#controls.wasPressed("bomb")) {
       this.scene?.emit("c_spawnbomb", this.pos);
     }
+  }
+
+  override onCollisionStart(
+    self: ex.Collider,
+    other: ex.Collider,
+    side: ex.Side,
+    contact: ex.CollisionContact,
+  ): void {
+    super.onCollisionStart(self, other, side, contact);
+    console.log("Player collision!", other.owner.name);
+    this.#dead = true;
+    this.animations.set("die");
+    this.events.emit("c_die");
   }
 }
