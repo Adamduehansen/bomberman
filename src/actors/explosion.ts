@@ -1,7 +1,103 @@
 import * as ex from "excalibur";
 import { Resources } from "../resources.ts";
-import { AnimationsComponent } from "../components/animations.ts";
 import { ExplosionCollisionGroup } from "../collision-groups.ts";
+
+type ExplosionPart = "center" | "vertical" | "horizonal";
+
+const ExplosionAnimationFactory: {
+  [key in ExplosionPart]: ex.FromSpriteSheetOptions["frameCoordinates"];
+} = {
+  center: [
+    {
+      x: 2,
+      y: 2,
+    },
+    {
+      x: 7,
+      y: 2,
+    },
+    {
+      x: 2,
+      y: 7,
+    },
+    {
+      x: 7,
+      y: 7,
+    },
+    {
+      x: 2,
+      y: 7,
+    },
+    {
+      x: 7,
+      y: 2,
+    },
+    {
+      x: 2,
+      y: 2,
+    },
+  ],
+  horizonal: [
+    {
+      x: 1,
+      y: 2,
+    },
+    {
+      x: 6,
+      y: 2,
+    },
+    {
+      x: 1,
+      y: 7,
+    },
+    {
+      x: 6,
+      y: 7,
+    },
+    {
+      x: 1,
+      y: 7,
+    },
+    {
+      x: 6,
+      y: 2,
+    },
+    {
+      x: 1,
+      y: 2,
+    },
+  ],
+  vertical: [
+    {
+      x: 2,
+      y: 1,
+    },
+    {
+      x: 7,
+      y: 1,
+    },
+    {
+      x: 2,
+      y: 6,
+    },
+    {
+      x: 7,
+      y: 6,
+    },
+    {
+      x: 2,
+      y: 6,
+    },
+    {
+      x: 7,
+      y: 1,
+    },
+    {
+      x: 2,
+      y: 1,
+    },
+  ],
+};
 
 const spriteSheet = ex.SpriteSheet.fromImageSource({
   image: Resources.img.explosion,
@@ -14,8 +110,6 @@ const spriteSheet = ex.SpriteSheet.fromImageSource({
 });
 
 export class Explosion extends ex.Actor {
-  #animations: AnimationsComponent<"explode">;
-
   constructor() {
     super({
       name: "Explosion",
@@ -27,36 +121,7 @@ export class Explosion extends ex.Actor {
 
     const explodeAnimation = ex.Animation.fromSpriteSheetCoordinates({
       spriteSheet: spriteSheet,
-      frameCoordinates: [
-        {
-          x: 2,
-          y: 2,
-        },
-        {
-          x: 7,
-          y: 2,
-        },
-        {
-          x: 2,
-          y: 7,
-        },
-        {
-          x: 7,
-          y: 7,
-        },
-        {
-          x: 2,
-          y: 7,
-        },
-        {
-          x: 7,
-          y: 2,
-        },
-        {
-          x: 2,
-          y: 2,
-        },
-      ],
+      frameCoordinates: ExplosionAnimationFactory["vertical"],
       strategy: ex.AnimationStrategy.End,
       durationPerFrame: 500,
     });
@@ -64,14 +129,6 @@ export class Explosion extends ex.Actor {
       this.kill();
     });
 
-    this.#animations = new AnimationsComponent({
-      explode: explodeAnimation,
-    });
-
-    this.addComponent(this.#animations);
-  }
-
-  override onInitialize(_engine: ex.Engine): void {
-    this.#animations.set("explode");
+    this.graphics.use(explodeAnimation);
   }
 }
