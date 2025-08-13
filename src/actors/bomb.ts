@@ -40,7 +40,7 @@ export class Bomb extends ex.Actor {
   override onInitialize(_engine: ex.Engine): void {
     this.#animations.set("idle");
     const killTimer = new ex.Timer({
-      interval: 2_000,
+      interval: 1_000,
       action: () => {
         this.kill();
       },
@@ -59,8 +59,9 @@ export class Bomb extends ex.Actor {
   }
 
   override onPreKill(scene: ex.Scene): void {
-    const explosion = new Explosion();
-    explosion.pos = ex.vec(this.pos.x, this.pos.y);
+    const explosion = new Explosion({
+      pos: ex.vec(this.pos.x, this.pos.y),
+    });
     scene.add(explosion);
   }
 }
