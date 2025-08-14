@@ -117,6 +117,16 @@ Deno.serve((req) => {
         }
         break;
       }
+      case "PLAYER_DIE": {
+        for (const [id, socket] of socketMap.entries()) {
+          if (id === output.playerId) {
+            continue;
+          }
+
+          socket.send(JSON.stringify(output));
+        }
+        break;
+      }
     }
   });
 

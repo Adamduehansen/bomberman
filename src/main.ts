@@ -160,6 +160,14 @@ ws.addEventListener("message", ({ data }) => {
 
       break;
     }
+    case "PLAYER_DIE": {
+      const otherPlayer = game.currentScene.actors.find((actor) =>
+        actor.name === output.playerId
+      );
+      if (otherPlayer !== undefined) {
+        otherPlayer.emit("kill");
+      }
+    }
   }
 });
 

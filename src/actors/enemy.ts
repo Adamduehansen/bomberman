@@ -14,5 +14,9 @@ export class Enemy extends Bomberman {
       pos: args.pos,
       spriteSheetImageSource: Resources.img.enemy,
     });
+
+    this.on("kill", () => {
+      this.animations.set("die");
+    });
   }
 }

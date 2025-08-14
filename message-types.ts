@@ -11,6 +11,12 @@ export const SpawnBombScheme = v.object({
 });
 export type SpawnBombData = v.InferOutput<typeof SpawnBombScheme>;
 
+const PlayerDie = v.object({
+  type: v.literal("PLAYER_DIE"),
+  playerId: v.string(),
+});
+export type PlayerDieData = v.InferOutput<typeof PlayerDie>;
+
 // Client handled schemes
 const ConnectionAcceptedScheme = v.object({
   type: v.literal("CONNECTION_ACCEPTED"),
@@ -57,6 +63,7 @@ export const ClientMessageVariantsScheme = v.variant("type", [
   InitPlayerForPlayersScheme,
   PlayerSetPosition,
   SpawnBombScheme,
+  PlayerDie,
 ]);
 
 // Server handled schemes.
@@ -87,15 +94,10 @@ const InitPlayerScheme = v.object({
 });
 export type InitPlayerData = v.InferOutput<typeof InitPlayerScheme>;
 
-const PlayerDie = v.object({
-  type: v.literal("PLAYER_DIE"),
-  playerId: v.string(),
-});
-export type PlayerDieData = v.InferOutput<typeof PlayerDie>;
-
 export const ServerMessageVariantsScheme = v.variant("type", [
   PlayerPositionScheme,
   ConnectionClosedScheme,
   InitPlayerScheme,
   SpawnBombScheme,
+  PlayerDie,
 ]);
