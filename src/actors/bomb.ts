@@ -1,5 +1,5 @@
 import * as ex from "excalibur";
-import { Explosion } from "./explosion.ts";
+import { ExplosionFactory } from "./explosion.ts";
 import { AnimationsComponent } from "../components/animations.ts";
 import { Resources } from "../resources.ts";
 import { BombCollisonGroup } from "../collision-groups.ts";
@@ -59,9 +59,9 @@ export class Bomb extends ex.Actor {
   }
 
   override onPreKill(scene: ex.Scene): void {
-    const explosion = new Explosion({
-      pos: ex.vec(this.pos.x, this.pos.y),
-    });
-    scene.add(explosion);
+    const explosionParts = ExplosionFactory.createExplosionParts(this.pos, 1);
+    for (let index = 0; index < explosionParts.length; index++) {
+      scene.add(explosionParts[index]);
+    }
   }
 }

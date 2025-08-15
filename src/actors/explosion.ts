@@ -267,82 +267,48 @@ class ExplosionPart extends ex.Actor {
   }
 }
 
-interface ExplosionArgs {
-  pos: ex.Vector;
-}
-
-export class Explosion extends ex.Actor {
-  constructor(args: ExplosionArgs) {
-    super({
-      name: "Explosion",
-      pos: args.pos,
-    });
-  }
-
-  override onInitialize(_engine: ex.Engine): void {
-    // Center
-    this.addChild(
+export class ExplosionFactory {
+  static createExplosionParts(pos: ex.Vector, size: number): ex.Actor[] {
+    return [
       new ExplosionPart({
         explosionPart: "center",
-        pos: ex.vec(0, 0),
+        pos: ex.vec(pos.x, pos.y),
       }),
-    );
-
-    // Top
-    this.addChild(
       new ExplosionPart({
         explosionPart: "vertical",
-        pos: ex.vec(0, -16),
+        pos: ex.vec(pos.x, pos.y - 16),
       }),
-    );
-
-    this.addChild(
       new ExplosionPart({
         explosionPart: "top",
-        pos: ex.vec(0, -32),
+        pos: ex.vec(pos.x, pos.y - 32),
       }),
-    );
-
-    // Right arm
-    this.addChild(
+      // Right arm
       new ExplosionPart({
         explosionPart: "horizonal",
-        pos: ex.vec(16, 0),
+        pos: ex.vec(pos.x + 16, pos.y),
       }),
-    );
-    this.addChild(
       new ExplosionPart({
         explosionPart: "right",
-        pos: ex.vec(32, 0),
+        pos: ex.vec(pos.x + 32, pos.y),
       }),
-    );
-
-    // Bottom
-    this.addChild(
+      // Bottom
       new ExplosionPart({
         explosionPart: "vertical",
-        pos: ex.vec(0, 16),
+        pos: ex.vec(pos.x, pos.y + 16),
       }),
-    );
-    this.addChild(
       new ExplosionPart({
         explosionPart: "bottom",
-        pos: ex.vec(0, 32),
+        pos: ex.vec(pos.x, pos.y + 32),
       }),
-    );
-
-    // Left
-    this.addChild(
+      // Left
       new ExplosionPart({
         explosionPart: "horizonal",
-        pos: ex.vec(-16, 0),
+        pos: ex.vec(pos.x - 16, pos.y),
       }),
-    );
-    this.addChild(
       new ExplosionPart({
         explosionPart: "left",
-        pos: ex.vec(-32, 0),
+        pos: ex.vec(pos.x - 32, pos.y),
       }),
-    );
+    ];
   }
 }
