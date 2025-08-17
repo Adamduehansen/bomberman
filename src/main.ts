@@ -10,7 +10,7 @@ import {
   type SpawnBombData,
 } from "../message-types.ts";
 import { Bomb } from "./actors/bomb.ts";
-import { loader } from "./resources.ts";
+import { loader, Resources } from "./resources.ts";
 import { Player } from "./actors/player.ts";
 import { Enemy } from "./actors/enemy.ts";
 import { AnimationsComponent } from "./components/animations.ts";
@@ -24,10 +24,11 @@ let connected = false;
 let socketId: string;
 
 const game = new ex.Engine({
-  width: 600,
-  height: 600,
+  width: 480,
+  height: 480,
   maxFps: 60,
   suppressPlayButton: true,
+  backgroundColor: ex.Color.fromHex("#388700"),
 });
 ex.Logger.getInstance().defaultLevel = ex.LogLevel.Debug;
 
@@ -55,6 +56,7 @@ const player = new Player({
 game.add(player);
 
 await game.start(loader);
+Resources.map.map1.addToScene(game.currentScene);
 
 // ===== Socket stuff =====
 const ws = new WebSocket("ws://localhost:8000/ws");
