@@ -120,7 +120,10 @@ export class Player extends Bomberman {
     contact: ex.CollisionContact,
   ): void {
     super.onCollisionStart(self, other, side, contact);
-    console.log("Player collision!", other.owner.name);
+    if (other.owner.name.toLowerCase().includes("explosion") === false) {
+      return;
+    }
+
     this.#dead = true;
     this.animations.set("die");
     this.events.emit("c_die");
