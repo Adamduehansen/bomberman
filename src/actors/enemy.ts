@@ -16,6 +16,7 @@ export class Enemy extends Bomberman {
     });
 
     this.on("kill", () => {
+      this.body.collisionType = ex.CollisionType.Passive;
       this.animations.set("die");
     });
   }

@@ -125,6 +125,7 @@ export class Player extends Bomberman {
     }
 
     this.#dead = true;
+    this.body.collisionType = ex.CollisionType.Passive;
     this.animations.set("die");
     this.events.emit("c_die");
   }
