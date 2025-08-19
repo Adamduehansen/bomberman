@@ -48,8 +48,8 @@ game.add(connectStatus);
 
 const player = new Player({
   pos: ex.vec(
-    ex.randomInRange(50, 550),
-    ex.randomInRange(50, 550),
+    ex.randomInRange(50, game.canvasWidth - 50),
+    ex.randomInRange(50, game.canvasWidth - 50),
   ),
 });
 
