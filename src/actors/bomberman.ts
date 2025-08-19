@@ -37,7 +37,7 @@ export abstract class Bomberman extends ex.Actor {
     const dieAnimation = ex.Animation.fromSpriteSheet(
       spriteSheet,
       ex.range(14, 20),
-      500,
+      100,
       ex.AnimationStrategy.End,
     );
     dieAnimation.events.on("end", () => {
